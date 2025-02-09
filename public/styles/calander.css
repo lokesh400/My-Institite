@@ -1,0 +1,10 @@
+.animate-scroll-calander { 
+    animation: scrollCalander 20s linear infinite; 
+} 
+.animate-scroll:hover {
+     animation-play-state: paused; 
+    } 
+@keyframes scrollCalander {
+     0% { transform: translateY(0); } 
+     100% { transform: translateY(-50%); }
+     }

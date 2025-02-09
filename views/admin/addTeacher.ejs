@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Teacher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white-100 min-h-screen flex items-center justify-center">
+
+    <div class="bg-white shadow-lg rounded-lg p-8 w-full sm:w-11/12 md:w-10/12 lg:w-9/12 xl:w-9/12">
+        <h2 class="text-2xl font-bold mb-6 text-center">Add New Teacher</h2>
+        <form action="/teachers/add" method="POST" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Name</label>
+                <input type="text" name="name" required class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Subject</label>
+                <input type="text" name="subject" required class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Father's Name</label>
+                <input type="text" name="fatherName" required class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Mobile Number</label>
+                <input type="text" name="mobileNumber" required class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Address</label>
+                <textarea name="address" required class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200"></textarea>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Photo URL (Optional)</label>
+                <input type="text" name="photo" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200">
+            </div>
+            <div class="flex justify-end">
+                <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">Add Teacher</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

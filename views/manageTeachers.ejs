@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Teacher Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen" style="display: flex;">
+
+    <section>
+        <%- include('./components/sidebar.ejs') %>
+    </section>
+
+    <section style="width: calc(100% - 254px); margin-left: 254px;">
+        <nav class="bg-white shadow">
+            <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <img class="h-8 w-auto" src="https://ai-public.creatie.ai/gen_page/logo_placeholder.png" alt="Logo"/>
+                        <span class="ml-3 text-xl font-semibold text-gray-900">Teacher Management</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-sm text-gray-500">Welcome,</span>
+                        <span class="text-sm font-medium text-gray-900 ml-1">Admin</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    
+        <!-- Main Content -->
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+            <!-- Search and Filter -->
+            <div class="bg-white shadow rounded-lg mb-8 p-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <a href="/add/new/teacher">
+                    <button class="bg-blue-600 px-4 py-2 text-white font-medium hover:bg-blue-700 flex items-center rounded-md">
+                        <i class="fas fa-plus mr-2"></i>Add New Teacher
+                    </button>
+                </a>
+                <div class="flex flex-1 max-w-lg relative">
+                    <input id="searchInput" type="text" class="block w-full rounded-lg border-gray-300 pl-10 pr-3 py-2 text-sm placeholder-gray-500" placeholder="Search teachers..."/>
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                </div>
+                <div>
+                    <select id="departmentFilter" class="border-gray-300 rounded-lg px-4 py-2 text-sm">
+                        <option value="">All Departments</option>
+                        <% 
+                            let departments = [...new Set(teachers.map(teacher => teacher.subject))]; 
+                            departments.forEach(dept => { 
+                        %>
+                            <option value="<%= dept %>"><%= dept %></option>
+                        <% }); %>
+                    </select>
+                </div>
+            </div>
+    
+            <!-- Teacher Table -->
+            <div class="bg-white shadow rounded-lg overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Teacher</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Department</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Contact</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teacherTable" class="bg-white divide-y divide-gray-200">
+                            <% for(let i = 0; i < teachers.length; i++) { %>
+                            <tr class="teacher-row" data-department="<%= teachers[i].subject %>">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <img class="h-10 w-10 rounded-full" src="https://ai-public.creatie.ai/gen_page/profile_placeholder.png" alt=""/>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium text-gray-900"><%= teachers[i].name %></div>
+                                            <div class="text-sm text-gray-500">ID: T-2024-00<%= i+1 %></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900"><%= teachers[i].subject %></div>
+                                    <div class="text-sm text-gray-500">Senior Faculty</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900"><%= teachers[i].contactNumber %></div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        Active
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <a href="/teacher/payment/<%= teachers[i]._id %>" class="text-blue-600 hover:text-blue-800 mr-3">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button class="text-red-600 hover:text-red-800 delete-teacher" data-id="<%= teachers[i]._id %>">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    
+        </div>
+    </section>
+
+    <!-- Search and Filter Functionality -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById("searchInput");
+            const departmentFilter = document.getElementById("departmentFilter");
+            const tableRows = document.querySelectorAll("#teacherTable .teacher-row");
+
+            function filterTeachers() {
+                const searchText = searchInput.value.toLowerCase();
+                const selectedDepartment = departmentFilter.value.toLowerCase();
+
+                tableRows.forEach(row => {
+                    const teacherName = row.querySelector("td:nth-child(1) .text-sm.font-medium").textContent.toLowerCase();
+                    const teacherDepartment = row.getAttribute("data-department").toLowerCase();
+
+                    const matchesSearch = teacherName.includes(searchText);
+                    const matchesDepartment = selectedDepartment === "" || teacherDepartment === selectedDepartment;
+
+                    if (matchesSearch && matchesDepartment) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+                });
+            }
+
+            searchInput.addEventListener("input", filterTeachers);
+            departmentFilter.addEventListener("change", filterTeachers);
+        });
+    </script>
+
+</body>
+</html>

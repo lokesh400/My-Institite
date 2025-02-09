@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>404 - Student Not Found</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet">    
+    <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+    <main class="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8">     
+           <div class="max-w-3xl w-full text-center">
+            <h1 class="text-9xl font-bold text-custom mb-4">404</h1>
+            <h2 class="text-3xl font-semibold text-gray-900 mb-4">Student Not Found</h2>
+            <p class="text-xl text-gray-600 mb-8">The student profile you are looking for could not be found in our database</p>            
+            <div class="flex justify-center gap-4 mb-12">
+                <button class="!rounded-button bg-custom text-white px-6 py-3 font-medium hover:bg-custom/90 transition-colors">                    
+                    <i class="fas fa-users mr-2"></i>
+                    Return to Student Directory
+                </button>
+                <form action="/result">
+                    <button class="!rounded-button border-2 border-custom text-custom px-6 py-3 font-medium hover:bg-custom/5 transition-colors">                    
+                        <i class="fas fa-search mr-2"></i>Search Again
+                    </button>
+                </form>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">                
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Helpful Tips</h3>
+                <ul class="text-gray-600 space-y-2">                    
+                    <li class="flex items-center justify-center">
+                        <i class="fas fa-check-circle text-custom mr-2"></i>
+                        Check if the student ID number is correct
+                    </li>
+                    <li class="flex items-center justify-center">                      
+                          <i class="fas fa-check-circle text-custom mr-2"></i>
+                        Verify the spelling of the student name
+                    </li>                   
+                     <li class="flex items-center justify-center">
+                        <i class="fas fa-check-circle text-custom mr-2"></i>
+                        Make sure the student is registered in the current term
+                    </li>
+                </ul>            
+            </div>
+
+            <div class="text-gray-600">
+                <p class="mb-2">Need help? Contact support</p>
+                <p class="text-sm">                    
+                    <i class="fas fa-envelope mr-1"></i>support@school.edu |
+                    <i class="fas fa-phone mr-1"></i>
+                    1-800-STUDENT |
+                    Error Reference: #ERR404-STU
+                </p>
+            </div>
+        </div>
+    </main>    
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 py-12">
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            
+            <!-- Header -->
+            <div class="px-8 py-6 bg-custom">
+                <h1 class="text-2xl font-bold text-white text-center">Student Registration Form</h1>
+            </div>
+            
+            <!-- Registration Form -->
+            <form class="p-8 space-y-8" action="/add/new/student" method="POST">
+                
+                <!-- Personal Information Section -->
+                <div class="space-y-6">
+                    <h2 class="text-xl font-semibold text-gray-900">Personal Information</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <!-- Student Name -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Student Name</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                                <input name="name" type="text" class="pl-10 w-full !rounded-button border-gray-300 focus:border-custom focus:ring-custom" required>
+                            </div>
+                        </div>
+                        
+                        <!-- Father's Name -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Father's Name</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
+                                    <i class="fas fa-user-tie"></i>
+                                </span>
+                                <input name="fatherName" type="text" class="pl-10 w-full !rounded-button border-gray-300 focus:border-custom focus:ring-custom" required>
+                            </div>
+                        </div>
+                        
+                        <!-- Class Selection -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Class</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </span>
+                                <select name="studentClass" class="pl-10 w-full !rounded-button border-gray-300 focus:border-custom focus:ring-custom" required>
+                                    <option value="">Select Class</option>
+                                    <option value="10th">Class 10</option>
+                                    <option value="9th">Class 9</option>
+                                    <option value="8th">Class 8</option>
+                                    <option value="7th">Class 7</option>
+                                    <option value="6th">Class 6</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Mobile Number -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mobile Number</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
+                                    <i class="fas fa-phone"></i>
+                                </span>
+                                <input name="mobileNumber" type="tel" pattern="[0-9]{10}" class="pl-10 w-full !rounded-button border-gray-300 focus:border-custom focus:ring-custom" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Address -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                        <div class="relative">
+                            <span class="absolute top-3 left-3 text-gray-500">
+                                <i class="fas fa-home"></i>
+                            </span>
+                            <textarea name="address" rows="3" class="pl-10 w-full !rounded-button border-gray-300 focus:border-custom focus:ring-custom" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Photo Upload -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Photo</label>
+                        <div class="flex items-center space-x-4">
+                            <div class="w-24 h-24 border-2 border-gray-300 border-dashed rounded-lg flex items-center justify-center">
+                                <img id="preview" class="hidden w-full h-full object-cover rounded-lg">
+                                <span class="text-gray-500" id="placeholder">
+                                    <i class="fas fa-user-circle text-4xl"></i>
+                                </span>
+                            </div>
+                            <div>
+                                <label class="cursor-pointer bg-custom text-white px-4 py-2 !rounded-button hover:bg-custom/90">
+                                    <span>Upload Photo</span>
+                                    <input type="file" accept="image/*" class="hidden" onchange="previewImage(event)">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fee Structure Section -->
+                <div class="space-y-6">
+                    <h2 class="text-xl font-semibold text-gray-900">Fee Structure</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <!-- Admission Charges -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Admission Charges</label>
+                            <div class="relative">
+                                <input name="admissionCharges" type="text" class="pl-10 w-full !rounded-button bg-gray-50 border-gray-300">
+                            </div>
+                        </div>
+                        
+                        <!-- Annual Charges -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Annual Charges</label>
+                            <div class="relative">
+                                <input name="annualCharges" type="text" class="pl-10 w-full !rounded-button bg-gray-50 border-gray-300">
+                            </div>
+                        </div>
+                        
+                        <!-- Development Charges -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Development Charges</label>
+                            <div class="relative">
+                                <input name="developmentCharges" type="text" class="pl-10 w-full !rounded-button bg-gray-50 border-gray-300">
+                            </div>
+                        </div>
+                        
+                        <!-- Monthly Fees -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Monthly Fees</label>
+                            <div class="relative">
+                                <input name="monthlyFees" type="text" class="pl-10 w-full !rounded-button bg-gray-50 border-gray-300">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-end space-x-4 pt-6">
+                    <button type="reset" class="px-6 py-2 border border-gray-300 text-gray-700 !rounded-button hover:bg-gray-50">Reset Form</button>
+                    <button type="submit" class="px-6 py-2 bg-custom text-white !rounded-button hover:bg-custom/90">Submit Registration</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Image Preview Script -->
+    <script>
+        function previewImage(event) {
+            const preview = document.getElementById('preview');
+            const placeholder = document.getElementById('placeholder');
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                preview.src = reader.result;
+                preview.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+            };
+
+            if (event.target.files[0]) reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+</body>
+</html>

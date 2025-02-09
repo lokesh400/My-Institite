@@ -1,0 +1,280 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>School Information Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../../styles/toast.css">
+    <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1">
+    </script>
+    <script>
+    function toggleForm(formId) { 
+        const form = document.getElementById(formId); 
+        form.classList.toggle('hidden');
+     }
+    </script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+</head>
+<body class="bg-gray-50 font-[&#39;Inter&#39;]">
+    <div style="display: flex;" >
+
+        <section>
+            <%- include('../components/toast.ejs') %>
+        </section>
+
+        <section>
+            <%- include('../components/sidebar.ejs') %>
+        </section>
+        <section style="width: calc(100% - 254px); margin-left: 254px;" >
+
+            <nav class="bg-white shadow-sm sticky top-0 z-50">
+
+                <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between h-16">
+                        <div class="flex">
+                            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                                <a href="#contact" class="border-transparent text-gray-500 hover:border-custom hover:text-custom inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Contact</a>
+                                <a href="#principal" class="border-transparent text-gray-500 hover:border-custom hover:text-custom inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Principal</a>
+                                <a href="#social" class="border-transparent text-gray-500 hover:border-custom hover:text-custom inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Social</a>
+                                <a href="#updates" class="border-transparent text-gray-500 hover:border-custom hover:text-custom inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Updates</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <main class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <section id="contact" class="mb-12">
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="mb-4">
+                            <button class="bg-custom text-white px-4 py-2 rounded hover:bg-opacity-90" onclick="toggleForm(&#34;contactForm&#34;)">Edit Contact Information</button>
+                            <form id="contactForm" class="hidden mt-4 space-y-4 bg-gray-50 p-4 rounded" method="POST" action="/update-address/<%= information._id %>?_method=PUT" >
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Address</label>
+                                    <input type="text" name="address" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="123 Education Lane"/>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Address</label>
+                                    <input type="text" name="city" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="123 Education Lane"/>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Address</label>
+                                    <input type="text" name="state" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="123 Education Lane"/>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Address</label>
+                                    <input type="text" name="zipCode" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="123 Education Lane"/>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Phone</label>
+                                    <input type="tel" class="Phone" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="(555) 123-4567"/>
+                                </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Established Year</label>
+                                        <input type="text" name="establishedYear" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="Est. 1985"/>
+                                    </div>
+                                        <button type="submit" class="mt-4 bg-custom text-white px-4 py-2 rounded hover:bg-opacity-90">
+                                            Save Changes</button>
+                                    </form>
+                                </div>
+                        <h2 class="text-2xl font-semibold text-gray-900 mb-6">Contact Information</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-map-marker-alt text-custom mt-1"></i>
+                                <div>
+                                    <h3 class="font-medium text-gray-900">Address</h3>
+                                    <p class="text-gray-600">123 Education Lane<br/>New York, NY 10001</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-phone text-custom mt-1"></i>
+                                <div>
+                                    <h3 class="font-medium text-gray-900">Phone</h3>
+                                    <p class="text-gray-600">(555) 123-4567</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-clock text-custom mt-1"></i>
+                                <div>
+                                    <h3 class="font-medium text-gray-900">Established</h3>
+                                    <p class="text-gray-600">Est. 1985</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section id="principal" class="mb-12">
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="mb-4">
+                            <button class="bg-custom text-white px-4 py-2 rounded hover:bg-opacity-90" onclick="toggleForm(&#34;principalForm&#34;)">Edit Principal Information</button>
+                            <form id="principalForm" class="hidden mt-4 space-y-4 bg-gray-50 p-4 rounded">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Principal Name</label>
+                                    <input type="text" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="Dr. Sarah Johnson"/>
+                                </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Email</label>
+                                        <input type="email" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="principal@school.edu"/>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Phone</label>
+                                        <input type="tel" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="(555) 123-4568"/>
+                                    </div>
+                                        <button type="submit" class="mt-4 bg-custom text-white px-4 py-2 rounded hover:bg-opacity-90">Save Changes</button>
+                                    </form>
+                                </div>
+                        <h2 class="text-2xl font-semibold text-gray-900 mb-6">Principal&#39;s Corner</h2>
+                        <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
+                            <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
+                                <i class="fas fa-user-tie text-4xl text-gray-400"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-medium text-gray-900">Dr. Sarah Johnson</h3>
+                                <div class="mt-2 space-y-2">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-envelope text-custom"></i>
+                                        <a href="mailto:principal@school.edu" class="text-gray-600 hover:text-custom">principal@school.edu</a>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-phone text-custom"></i>
+                                        <span class="text-gray-600">(555) 123-4568</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section id="social" class="mb-12">
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="mb-4">
+                            <button class="bg-custom text-white px-4 py-2 rounded hover:bg-opacity-90" onclick="toggleForm(&#34;socialForm&#34;)">Edit Social Links</button>
+                            <form id="socialForm" class="hidden mt-4 space-y-4 bg-gray-50 p-4 rounded" method="POST" action="/update/social-media/<%= information._id %>?_method=PUT" >
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Facebook URL</label>
+                                    <input name="facebook" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="#"/>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Twitter URL</label>
+                                    <input name="twitter" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="#"/>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Instagram URL</label>
+                                    <input name="instagram" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="#"/>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">LinkedIn URL</label>
+                                    <input name="linkedin" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="#"/>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                                    <input name="email" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="contact@school.edu"/>
+                                </div>
+                                <button type="submit" class="mt-4 bg-custom text-white px-4 py-2 rounded hover:bg-opacity-90">Save Changes</button>
+                            </form>
+                        </div>
+                        <h2 class="text-2xl font-semibold text-gray-900 mb-6">Connect With Us</h2>
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                            <a href="#" class="flex items-center justify-center space-x-2 p-3 rounded-lg border border-gray-200 hover:border-custom hover:text-custom transition-colors">
+                                <i class="fab fa-facebook text-xl"></i>
+                                <span>Facebook</span>
+                            </a>
+                            <a href="#" class="flex items-center justify-center space-x-2 p-3 rounded-lg border border-gray-200 hover:border-custom hover:text-custom transition-colors">
+                                <i class="fab fa-twitter text-xl"></i>
+                                <span>Twitter</span>
+                            </a>
+                            <a href="#" class="flex items-center justify-center space-x-2 p-3 rounded-lg border border-gray-200 hover:border-custom hover:text-custom transition-colors">
+                                <i class="fab fa-instagram text-xl"></i>
+                                <span>Instagram</span>
+                            </a>
+                            <a href="#" class="flex items-center justify-center space-x-2 p-3 rounded-lg border border-gray-200 hover:border-custom hover:text-custom transition-colors">
+                                <i class="fab fa-linkedin text-xl"></i>
+                                <span>LinkedIn</span>
+                            </a>
+                            <a href="mailto:contact@school.edu" class="flex items-center justify-center space-x-2 p-3 rounded-lg border border-gray-200 hover:border-custom hover:text-custom transition-colors">
+                                <i class="fas fa-envelope text-xl"></i>
+                                <span>Email</span>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+                <!-- Header Updates -->
+                <section id="updates" class="mb-12">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-lg shadow-sm p-6">
+                            <div class="mb-4">
+                                <button class="bg-custom text-white px-4 py-2 rounded hover:bg-opacity-90" onclick="toggleForm(&#34;updatesForm&#34;)">Add New Update</button>
+                                <form id="updatesForm" method="POST" action="/update/header/<%= information._id %>?_method=PUT" class="hidden mt-4 space-y-4 bg-gray-50 p-4 rounded">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Title</label>
+                                        <input type="text" name="update" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" placeholder="Enter update title"/>
+                                    </div>
+                                    <button type="submit" class="mt-4 bg-custom text-white px-4 py-2 rounded hover:bg-opacity-90">
+                                        Add Update</button>
+                                </form>
+                            </div>
+                            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Current Update</h2>
+                            <div class="border-l-4 border-custom pl-4 mb-6">
+                                <p class="text-gray-600"><%= information.updates.headerUpdates %></p>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-sm p-6">
+                            <div class="mb-4">
+                                <button class="bg-custom text-white px-4 py-2 rounded hover:bg-opacity-90" onclick="toggleForm(&#34;eventsForm&#34;)">Add New Event</button>
+                                <form id="eventsForm" class="hidden mt-4 space-y-4 bg-gray-50 p-4 rounded">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Event Name</label>
+                                        <input type="text" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" placeholder="Enter event name"/>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Date</label>
+                                        <input type="date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                                    </div>
+                                        <button type="submit" class="mt-4 bg-custom text-white px-4 py-2 rounded hover:bg-opacity-90">
+                                            Add Event
+                                        </button>
+                                    </form>
+                                </div>
+                            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Upcoming Events</h2>
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0 w-16 text-center">
+                                        <div class="text-sm font-medium text-custom">MAR</div>
+                                        <div class="text-2xl font-bold text-gray-900">15</div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="font-medium text-gray-900">Annual Sports Day</h3>
+                                        <p class="text-sm text-gray-600">School grounds, 9:00 AM - 4:00 PM</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0 w-16 text-center">
+                                        <div class="text-sm font-medium text-custom">MAR</div>
+                                        <div class="text-2xl font-bold text-gray-900">20</div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="font-medium text-gray-900">Science Fair</h3>
+                                        <p class="text-sm text-gray-600">School Auditorium, 10:00 AM - 2:00 PM</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0 w-16 text-center">
+                                        <div class="text-sm font-medium text-custom">MAR</div>
+                                        <div class="text-2xl font-bold text-gray-900">25</div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="font-medium text-gray-900">Parent-Teacher Meeting</h3>
+                                        <p class="text-sm text-gray-600">Individual Classrooms, 2:00 PM - 6:00 PM</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+        </section>
+
+    </div>
+    <script src="../../js/enquiry.js" ></script>
+</body>
+</html>

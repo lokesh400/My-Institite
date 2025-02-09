@@ -1,0 +1,12 @@
+@keyframes scroll3 {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-scroll-running-text {
+    animation: scroll3 20s linear infinite;
+}

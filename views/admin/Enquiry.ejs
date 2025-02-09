@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Enquiries Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .filter-btn {
+            background-color: black;
+            color: white;
+        }
+        .filter-btn.active {
+            background-color: #3498db !important;
+            color: white;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    
+    <main style="display: flex;" >
+        <section>
+            <%- include('../components/sidebar.ejs') %>
+        </section>
+
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8" style="width: calc(100% - 264px); margin-left: 264px;">
+            <header class="mb-8">
+                <div class="flex items-center justify-between">
+                    <h1 class="text-3xl font-bold text-gray-900">Enquiries Dashboard</h1>
+                    <span class="text-sm text-gray-500">Total Enquiries: <span id="total-enquiries"><%= enquiries.length %></span></span>
+                </div>
+            </header>
+    
+            <div class="mb-6 flex space-x-4">
+                <button onclick="filterEnquiries('all', this)" class="filter-btn active px-4 py-2 font-medium text-sm">
+                    <i class="fas fa-list-ul mr-2"></i> All Enquiries
+                </button>
+                <button onclick="filterEnquiries('open', this)" class="filter-btn px-4 py-2 font-medium text-sm">
+                    <i class="fas fa-envelope-open mr-2"></i> Open Enquiries
+                </button>
+                <button onclick="filterEnquiries('closed', this)" class="filter-btn px-4 py-2 font-medium text-sm">
+                    <i class="fas fa-envelope mr-2"></i> Closed Enquiries
+                </button>
+            </div>
+    
+            <!-- Enquiries Table -->
+            <div class="bg-white shadow rounded-lg overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Contact Number</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Message</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="enquiries-list" class="bg-white divide-y divide-gray-200">
+                        <% enquiries.forEach(enquiry => { %>
+                            <tr class="enquiry-item" data-id="<%= enquiry._id %>" data-status="<%= enquiry.openStatus ? 'open' : 'closed' %>">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900"><%= enquiry.name %></div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-500">+91 <%= enquiry.number %></div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900 truncate max-w-md"><%= enquiry.message %></div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="status-badge px-2 inline-flex text-xs font-semibold rounded-full <%= enquiry.openStatus ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+                                        <%= enquiry.openStatus ? 'Open' : 'Closed' %>
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <button onclick="toggleStatus('<%= enquiry._id %>')" class="text-custom hover:text-custom-dark mr-3">
+                                        <i class="fas fa-toggle-<%= enquiry.openStatus ? 'on' : 'off' %>"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="../../js/enquiry.js" ></script>
+</body>
+</html>

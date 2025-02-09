@@ -1,0 +1,267 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Education Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex">
+        
+        <div>
+            <%- include('./components/sidebar.ejs') %>
+        </div>
+
+        <div class="flex-1" style="width: calc(100% - 254px); margin-left: 254px;" >
+            <header class="bg-white border-b border-gray-200">
+                <div class="px-6 py-4 flex items-center justify-between">
+                    <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
+                    <div class="flex items-center space-x-4">
+                        <button class="p-2 text-gray-400 hover:text-gray-500">
+                            <i class="fas fa-bell"></i>
+                        </button>
+                        <div class="relative">
+                            <button class="flex items-center space-x-3">
+                                <img class="h-8 w-8 rounded-full" src="https://creatie.ai/ai/api/search-image?query=A professional headshot of a middle-aged male educator wearing a business casual attire, captured against a neutral background with soft lighting, expressing warmth and approachability&width=100&height=100&orientation=squarish&flag=fd5f1729-1513-4fe7-8de3-2be9d9bbae58&flag=a45c3f6e-9732-488c-aa6e-131ab1db69d9" alt=""/>
+                                <span class="text-sm font-medium text-gray-700">John Smith</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <main class="p-6">
+                <div class="grid grid-cols-4 gap-6 mb-6">
+                    <div class="bg-white p-6 rounded-lg border border-gray-200">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-custom/10 text-custom">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-sm font-medium text-gray-500">Total Students</h3>
+                                <p class="text-2xl font-semibold text-gray-900">2,543</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-gray-200">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-custom/10 text-custom">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-sm font-medium text-gray-500">Active Courses</h3>
+                                <p class="text-2xl font-semibold text-gray-900">128</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-gray-200">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-custom/10 text-custom">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-sm font-medium text-gray-500">Total Teachers</h3>
+                                <p class="text-2xl font-semibold text-gray-900">85</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-gray-200">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-custom/10 text-custom">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-sm font-medium text-gray-500">Monthly Revenue</h3>
+                                <p class="text-2xl font-semibold text-gray-900">$45,250</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-6 mb-6">
+                    <div class="col-span-2 bg-white p-6 rounded-lg border border-gray-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-medium text-gray-900">Revenue Overview</h2>
+                            <div class="flex items-center space-x-2">
+                                <button class="px-3 py-1 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg !rounded-button">Monthly</button>
+                                <button class="px-3 py-1 text-sm font-medium text-white bg-custom rounded-lg !rounded-button">Annual</button>
+                            </div>
+                        </div>
+                        <div id="revenueChart" class="h-80"></div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-gray-200">
+                        <h2 class="text-lg font-medium text-gray-900 mb-4">Quick Actions</h2>
+                        <div class="space-y-3">
+                            <button class="w-full flex items-center justify-center px-4 py-2 border border-custom text-custom bg-custom/10 font-medium rounded-lg !rounded-button">
+                                <i class="fas fa-plus-circle mr-2"></i>
+                                Add New Course
+                            </button>
+                            <button class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg !rounded-button">
+                            <a href="/add/new/student"> <i class="fas fa-user-plus mr-2"></i>
+                                Add Student
+                            </a>
+                            </button>
+                            <button class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg !rounded-button">
+                                <i class="fas fa-user-tie mr-2"></i>
+                                Add Teacher
+                            </button>
+                            <button class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg !rounded-button">
+                                <i class="fas fa-chart-line mr-2"></i>
+                                View Reports
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg border border-gray-200">
+                        <h2 class="text-lg font-medium text-gray-900 mb-4">Recent Activities</h2>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <img class="h-10 w-10 rounded-full" src="https://creatie.ai/ai/api/search-image?query=A professional headshot of a young female student with a friendly smile, wearing casual attire, against a light background&width=100&height=100&orientation=squarish&flag=c00c6c7c-c2ac-4284-affa-0ccade48c26a&flag=2ef11699-5c4f-4ab3-b115-07b4d4caa945" alt=""/>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">Sarah Johnson enrolled in &#34;Advanced Web Development&#34;</p>
+                                    <p class="text-sm text-gray-500">2 minutes ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <img class="h-10 w-10 rounded-full" src="https://creatie.ai/ai/api/search-image?query=A professional headshot of a male teacher in his 30s, wearing glasses and a professional outfit, against a neutral background&width=100&height=100&orientation=squarish&flag=c5b00896-36d1-49e3-b509-5f84cfa14e69&flag=5fbe67ae-3fd3-44ef-b924-1ff1401865f2" alt=""/>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">Prof. Michael Chen updated &#34;Data Science Fundamentals&#34;</p>
+                                    <p class="text-sm text-gray-500">15 minutes ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <img class="h-10 w-10 rounded-full" src="https://creatie.ai/ai/api/search-image?query=A professional headshot of a young male student with a confident expression, wearing smart casual clothing, against a clean background&width=100&height=100&orientation=squarish&flag=0f271156-72ea-4f90-afd3-358f9318640b&flag=0199d9e8-d817-4d77-bda3-0d9464c217aa" alt=""/>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">James Wilson completed &#34;Python Programming&#34;</p>
+                                    <p class="text-sm text-gray-500">1 hour ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-gray-200">
+                        <h2 class="text-lg font-medium text-gray-900 mb-4">Course Status</h2>
+                        <div id="courseChart" class="h-64"></div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-gray-200">
+                        <h2 class="text-lg font-medium text-gray-900 mb-4">System Notifications</h2>
+                        <div class="space-y-4">
+                            <div class="flex items-start p-3 bg-yellow-50 rounded-lg">
+                                <i class="fas fa-exclamation-triangle text-yellow-400 mt-0.5"></i>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-yellow-800">System maintenance scheduled</p>
+                                    <p class="text-sm text-yellow-700">Tomorrow, 2:00 AM - 4:00 AM</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start p-3 bg-green-50 rounded-lg">
+                                <i class="fas fa-check-circle text-green-400 mt-0.5"></i>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-green-800">New course approvals pending</p>
+                                    <p class="text-sm text-green-700">5 courses need review</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start p-3 bg-blue-50 rounded-lg">
+                                <i class="fas fa-info-circle text-blue-400 mt-0.5"></i>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-blue-800">Platform update available</p>
+                                    <p class="text-sm text-blue-700">Version 2.4.0 ready to install</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    <script>
+        const revenueChart = echarts.init(document.getElementById('revenueChart'));
+        const revenueOption = {
+            animation: false,
+            tooltip: {
+                trigger: 'axis'
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                name: 'Revenue',
+                type: 'line',
+                smooth: true,
+                data: [30000, 28000, 35000, 32000, 45000, 43000, 38000, 40000, 42000, 45000, 48000, 50000],
+                areaStyle: {
+                    opacity: 0.1
+                },
+                itemStyle: {
+                    color: '#4F46E5'
+                },
+                lineStyle: {
+                    width: 3
+                }
+            }]
+        };
+        revenueChart.setOption(revenueOption);
+        const courseChart = echarts.init(document.getElementById('courseChart'));
+        const courseOption = {
+            animation: false,
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                top: '5%',
+                left: 'center'
+            },
+            series: [{
+                name: 'Course Status',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                avoidLabelOverlap: false,
+                itemStyle: {
+                    borderRadius: 10,
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: '20',
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: false
+                },
+                data: [
+                    { value: 48, name: 'Active' },
+                    { value: 32, name: 'Completed' },
+                    { value: 20, name: 'Pending' }
+                ]
+            }]
+        };
+        courseChart.setOption(courseOption);
+        window.addEventListener('resize', function() {
+            revenueChart.resize();
+            courseChart.resize();
+        });
+    </script>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Form - <%= form.title %></title>
+
+    <!-- Tailwind CSS & Font Awesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: white;
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+
+   <!-- Form Container -->
+<main class="w-11/12 mx-auto mt-10 px-4 sm:px-6 lg:px-8 flex-grow">
+    <div class="bg-white shadow-lg rounded-xl p-8">
+        <h1 class="text-3xl font-bold text-gray-800 text-center mb-8"><%= form.title %></h1>
+
+        <form action="/forms/<%= form._id %>" method="POST" class="space-y-8">
+            
+            <!-- Grid Layout for Fields -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <% form.fields.forEach(field => { %>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700"><%= field.label %></label>
+                        
+                        <% if (field.type === "text" || field.type === "email" || field.type === "number") { %>
+                            <div class="relative mt-2">
+                                <input type="<%= field.type %>" name="<%= field.label %>" required="<%= field.required %>"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+
+                        <% } else if (field.type === "checkbox" || field.type === "radio") { %>
+                            <div class="mt-2 space-y-2">
+                                <% field.options.forEach(option => { %>
+                                    <label class="flex items-center space-x-3">
+                                        <input type="<%= field.type %>" name="<%= field.label %>" value="<%= option %>" 
+                                               class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                        <span class="text-gray-700"><%= option %></span>
+                                    </label>
+                                <% }); %>
+                            </div>
+
+                        <% } else if (field.type === "dropdown") { %>
+                            <select name="<%= field.label %>" class="w-full mt-2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <% field.options.forEach(option => { %>
+                                    <option value="<%= option %>"><%= option %></option>
+                                <% }); %>
+                            </select>
+                        <% } %>
+                    </div>
+                <% }); %>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-end space-x-4">
+                <button type="reset" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition">
+                    Cancel
+                </button>
+                <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>
+

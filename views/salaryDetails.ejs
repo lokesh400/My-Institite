@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment History</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+</head>
+<body class="bg-gray-50 font-[Inter]">
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="#" class="border-custom text-custom border-b-2 inline-flex items-center px-1 pt-1 text-sm font-medium">
+                            Payment History
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <button type="button" onclick="toggleModal()" class="!rounded-button bg-custom p-2 text-white shadow-sm hover:bg-custom/90">
+                        <i class="fas fa-plus mr-2"></i>New Payment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <% const months = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ]; %>
+    
+            <% months.forEach(month => { %>
+                <div class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-900"><%= month %></h3>
+                        <% 
+                            const entriesForMonth = student.payments.filter(payment => payment.month === month);
+                        %>
+                    </div>
+                    <div class="space-y-3">
+                        <% if (entriesForMonth.length > 0) { %>
+                            <% entriesForMonth.forEach(entry => { %>
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">
+                                            <%= entry.paid ? "Paid" : "Pending" %>
+                                        </p>
+                                        <p class="text-xs text-gray-500">
+                                            <%= new Date(entry.createdAt).toLocaleDateString() %>
+                                        </p>
+                                    </div>
+                                    <span class="text-sm font-semibold text-gray-900">
+                                        ₹<%= entry.amount.toFixed(2) %>
+                                    </span>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <div class="flex flex-col items-center justify-center h-32 bg-gray-50 rounded-lg">
+                                <i class="fas fa-calendar-alt text-gray-400 text-2xl mb-2"></i>
+                                <p class="text-sm text-gray-500">No payments scheduled</p>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </main>
+    
+
+    <!-- Modal for New Payment -->
+    <div id="paymentModal" class="fixed inset-0 flex items-center justify-center hidden bg-black bg-opacity-50">
+        <div class="bg-white rounded-lg p-6 w-96">
+            <h2 class="text-lg font-semibold mb-4">New Payment</h2>
+            <form id="newPaymentForm" method="POST" action="/add/new/teacher/payment/<%= student._id %>">
+                <div class="mb-4">
+                    <label for="amount" class="block text-sm font-medium text-gray-700">Amount</label>
+                    <input type="number" id="amount" name="amount" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" onclick="toggleModal()" class="mr-2 text-gray-500">Cancel</button>
+                    <button type="submit" class="bg-custom text-white px-4 py-2 rounded-md">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        function toggleModal() {
+            const modal = document.getElementById('paymentModal');
+            modal.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>

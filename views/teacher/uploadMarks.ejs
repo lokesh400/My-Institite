@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Upload Student Marks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet"> 
+    <style>
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+    </style>  
+    <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+</head>
+<body class="min-h-screen bg-gray-50 font-[Inter]" style="display: flex;">
+
+    <section>
+        <%- include('../components/sidebar.ejs') %>
+    </section>
+
+    <section style="width: calc(100% - 264px); margin-left: 264px;">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="mb-8">
+                <h1 class="text-2xl font-semibold text-gray-900">Upload Student Marks</h1>
+                <p class="mt-2 text-sm text-gray-600">Enter marks for each student in the class</p>
+            </div>        <div class="bg-white shadow rounded-lg overflow-hidden">
+                <form action="/upload/marks/<%= students.length %>" method="POST" class="divide-y divide-gray-200">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">                       
+                             <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student ID</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student Name</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Marks</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">                           
+                                 <% for(let i=0; i<students.length; i++) { %>
+                                <tr class="hover:bg-gray-50">                                
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        <input type="text" value="<%= students[i]._id %>" name="id<%=i%>" readonly class="bg-gray-50 border-gray-200 rounded-button text-sm w-full">
+                                    </td>                                <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900"><%= students[i].name %></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">                                   
+                                         <div class="relative">
+                                            <input type="number" name="marks<%=i%>" required min="0" max="100" class="block w-full pr-10 border-gray-200 rounded-button text-sm focus:ring-custom focus:border-custom" placeholder="Enter marks">                                       
+                                             <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                <i class="fas fa-percent text-gray-400 text-sm"></i>
+                                            </div>
+                                        </div>
+                                    </td>                            
+                                </tr>
+                                <% } %>
+                            </tbody>
+                        </table>                </div>
+                    <div class="px-6 py-4 bg-gray-50">
+                        <div class="flex justify-end">
+                            <button type="button" class="bg-white py-2 px-4 border border-gray-300 rounded-button shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom mr-3">                           
+                                 Cancel
+                            </button>
+                            <button type="submit" class="!rounded-button inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-white bg-custom hover:bg-custom/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom">                            
+                                Upload Marks
+                            </button>
+                        </div>
+                    </div>
+                </form>        
+            </div>
+        </div>
+    </section>
+
+    </body>
+</html>
