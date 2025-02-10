@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Add New Result</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../../styles/toast.css">
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+     
+</head>
+
+<%- include('../components/toast.ejs') %>
+
+<body class="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6">
+    <div class="w-full max-w-xl bg-white rounded-lg shadow-sm p-8">
+        <h1 class="text-2xl font-semibold text-center mb-8 text-gray-800">Add New Result</h1>
+        <form action="/add/new/result" method="POST" id="testForm" enctype="multipart/form-data" class="space-y-6">
+            <div class="drop-area group relative border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-custom transition-colors cursor-pointer bg-gray-50">
+                <div id="selected-image" class="mb-6 hidden">
+                    <img id="preview-image" class="max-h-48 mx-auto rounded-lg shadow-sm" src="" alt="Selected image preview"/>
+                </div>
+                <input required type="file" id="file-input" name="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" required=""/>
+                <div class="space-y-4">
+                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 group-hover:text-custom transition-colors"></i>
+                    <div class="text-sm text-gray-600">
+                        <span class="font-medium">Drag &amp; drop</span> files here or click to upload
+                    </div>
+                </div>
+            </div>
+            <div id="file-preview" class="hidden bg-gray-50 rounded-lg p-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-file-alt text-gray-400"></i>
+                    <span id="file-name" class="text-sm text-gray-600 truncate max-w-xs">
+
+                    </span>
+                </div>
+                <button type="button" id="remove-file" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div><div class="grid grid-cols-2 gap-4">
+                <div class="relative">
+                    <input required id="exam-name" name="name" required="" class="peer w-full h-12 px-4 border border-gray-300 rounded-lg focus:border-custom focus:ring-1 focus:ring-custom transition-colors"/>
+                    <label for="exam-name" class="absolute left-2 -top-2.5 bg-white px-2 text-sm text-gray-600 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-custom">Student Name
+                    </label>
+                </div>
+                <div class="relative">
+                    <input required id="exam-name" name="exam" required="" class="peer w-full h-12 px-4 border border-gray-300 rounded-lg focus:border-custom focus:ring-1 focus:ring-custom transition-colors"/>
+                    <label for="exam-name" class="absolute left-2 -top-2.5 bg-white px-2 text-sm text-gray-600 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-custom">Exam Name
+                    </label>
+                </div>
+                    <div class="relative">
+                        <input required id="exam-year" name="year" required="" class="peer w-full h-12 px-4 border border-gray-300 rounded-lg focus:border-custom focus:ring-1 focus:ring-custom transition-colors"/>
+                        <label for="exam-year" class="absolute left-2 -top-2.5 bg-white px-2 text-sm text-gray-600 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-custom">Exam Year
+                        </label>
+                    </div>
+                </div>
+            
+            <button type="submit" class="!rounded-button w-full py-3 px-4 bg-custom text-white font-medium hover:bg-custom/90 focus:ring-4 focus:ring-custom/20 transition-colors flex items-center justify-center space-x-2">
+                <span>Add Result</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+    <script>const dropArea = document.querySelector('.drop-area');
+const fileInput = document.getElementById('file-input');
+const filePreview = document.getElementById('file-preview');
+const fileName = document.getElementById('file-name');
+const removeFile = document.getElementById('remove-file');
+const selectedImage = document.getElementById('selected-image');
+const previewImage = document.getElementById('preview-image');
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, preventDefaults, false);
+});
+function preventDefaults (e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, highlight, false);
+});
+['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, unhighlight, false);
+});
+function highlight() {
+    dropArea.classList.add('border-custom', 'bg-custom/5');
+}
+function unhighlight() {
+    dropArea.classList.remove('border-custom', 'bg-custom/5');
+}
+dropArea.addEventListener('drop', handleDrop, false);
+function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    handleFiles(files);
+}
+fileInput.addEventListener('change', function() {
+    handleFiles(this.files);
+});
+function handleFiles(files) {
+    if (files.length > 0) {
+        const file = files[0];
+        fileName.textContent = file.name;
+        filePreview.classList.remove('hidden');
+        
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                selectedImage.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+}
+removeFile.addEventListener('click', function() {
+    fileInput.value = '';
+    filePreview.classList.add('hidden');
+    fileName.textContent = '';
+    selectedImage.classList.add('hidden');
+    previewImage.src = '';
+});
+document.getElementById('testForm').addEventListener('submit', function(e) {
+    const submitButton = this.querySelector('button[type="submit"');
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+});
+</script>
+<script src="../../js/toast.js" ></script>
+</body>
+</html>

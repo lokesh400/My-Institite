@@ -5,6 +5,49 @@ const Response = require("../models/Response");
 const Teacher = require("../models/Teacher");
 const Enquiry = require("../models/Enquiry");
 const Information = require("../models/Information");
+const Result = require("../models/Result");
+
+const multer = require('multer');
+const path = require('path');
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
+const { error } = require("console");
+
+cloudinary.config({
+    cloud_name:process.env.cloud_name, 
+    api_key:process.env.api_key, 
+    api_secret:process.env.api_secret
+});
+
+// Multer disk storage configuration
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // Save files to 'uploads/' folder
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    // Use the original file name
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+// Initialize multer with diskStorage
+const upload = multer({ storage: storage });
+
+// Function to upload files to Cloudinary
+const Upload = {
+  uploadFile: async (filePath) => {
+    try {
+      // Upload the file to Cloudinary
+      const result = await cloudinary.uploader.upload(filePath, {
+        resource_type: "auto", // Auto-detect file type (image, video, etc.)
+      });
+      return result;
+    } catch (error) {
+      throw new Error('Upload failed: ' + error.message);
+    }
+  }
+};
 
 // New form
 router.get("/create/newform", async  (req, res) => {
@@ -215,5 +258,57 @@ router.put("/update/header/:id", async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   });
+
+router.get('/add/new/result', (req,res)=>{
+  res.render('admin/newResult.ejs');
+})  
+
+//Add Our Result
+router.post('/add/new/result', upload.single("file"), async (req, res) => {
+  try {
+    const { name,exam,year } = req.body;
+    const result = await Upload.uploadFile(req.file.path);  // Use the path for Cloudinary upload
+    const imageUrl = result.secure_url;
+    fs.unlink(req.file.path, (err) => {
+      if (err) {
+        console.error('Error deleting local file:', err);
+      } else {
+        console.log('Local file deleted successfully');
+      }
+    });
+    const newResult = new Result({
+      name,exam,year,imageUrl,publicId:result.public_id
+    });
+    await newResult.save();
+    req.flash('success_msg',"New Result Added Successfully !")
+    res.redirect("/add/new/result")
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Upload failed: ' + error.message });
+  }
+});  
+
+router.get('/show/all/results', async(req,res)=>{
+  const results = await Result.find();
+  res.render('admin/allResult.ejs',{results});
+})
+
+router.delete("/delete/result/:id", async (req, res) => {
+  try {
+    const image = await Result.findById(req.params.id);
+    if (!image) return res.status(404).json({ message: "Image not found" });
+    // Delete from Cloudinary
+    const cloudinaryResponse = await cloudinary.uploader.destroy(image.publicId);
+    if (cloudinaryResponse.result !== "ok") {
+      return res.status(400).json({ message: "Failed to delete from Cloudinary" });
+    }
+    // Delete from MongoDB
+    await Result.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "Image deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Deletion failed", error: error.message });
+  }
+});
+
 
 module.exports = router;
