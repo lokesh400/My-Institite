@@ -11,106 +11,110 @@
     <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
 </head>
 <body class="bg-gray-50 min-h-screen font-['Inter']">
-    <nav class="bg-white border-b border-gray-200">
-        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">            
-            <div class="flex justify-between h-16">
-                <div class="flex">
-                    <div class="flex-shrink-0 flex items-center">                        
-                        <img class="h-8 w-auto" src="https://ai-public.creatie.ai/gen_page/logo_placeholder.png" alt="Logo">
-                    </div>                    
-                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                        <a href="#" class="border-custom text-custom inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">                            
-                            Forms
-                        </a>
-                    </div>
-                </div>
-                <div class="flex items-center">  
-                    <a href="/create/newform">
-                        <button type="button" class="!rounded-button bg-custom px-4 py-2 text-white text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom">                        
-                            <i class="fas fa-plus mr-2"></i>Create New Form
-                        </button>
-                    </a>                  
-                </div>
-            </div>       
-         </div>
-    </nav>
 
-    <main class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="md:flex md:items-center md:justify-between mb-8">            
-            <div class="flex-1 min-w-0">
-                <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">                    
-                    Available Forms
-                </h1>
-            </div>
-            <div class="mt-4 flex md:mt-0 md:ml-4">                
-                <div class="relative rounded-md shadow-sm max-w-xs">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">                        
-                        <i class="fas fa-search text-gray-400"></i>
-                    </div>
-                    <input type="text" class="!rounded-button block w-full pl-10 sm:text-sm border-gray-300 focus:ring-custom focus:border-custom" placeholder="Search forms...">                
-                </div>
-                <div class="ml-3">
-                    <select class="!rounded-button block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-custom focus:border-custom sm:text-sm">                        
-                        <option>Sort by Name</option>
-                        <option>Sort by Date</option>
-                        <option>Sort by Responses</option>
-                    </select>
-                </div>
-            </div>
-        </div>
+    <section>
+        <%- include('../../components/sidebar.ejs') %>
+    </section>
 
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">            
-            <% forms.forEach(form => { %>
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-6">                    
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-file-alt text-custom text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-medium text-gray-900">
-                                    <%= form.title %>
-                                </h3>
-                                <p class="text-sm text-gray-500">Created At: <%= form.created.toString().split("GMT")[0].trim() %></p>
-                            </div>                    
-                        </div>
-                        <div class="mt-4">
-                            <p class="text-sm text-gray-600">32 responses • Active</p>                    
-                        </div>
-                        <div class="mt-6 flex space-x-3">
-                            <a href="/forms/<%= form._id %>">
-                                <button class="!rounded-button flex-1 bg-custom text-white px-4 py-2 text-sm font-medium hover:bg-indigo-700">                           
-                                    <i class="fas fa-eye mr-2"></i>View Form
-                                </button>
-                            </a> 
-                            <a href="/forms/<%= form._id %>/responses">
-                                <button class="!rounded-button flex-1 bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium hover:bg-gray-200">                           
-                                    <i class="fas fa-chart-bar mr-2"></i>Responses
-                                </button>
+    <div style="margin-left: 254px; width: calc(100% - 254px);" >
+        <nav class="bg-white border-b border-gray-200">
+            <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">            
+                <div class="flex justify-between h-16">
+                    <div class="flex">                   
+                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                            <a href="#" class="border-custom text-custom inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">                            
+                                Form Management
                             </a>
-                            <!-- Delete Button -->
-                            <button onclick="confirmDelete('<%= form._id %>')" class="!rounded-button flex-1 bg-red-600 text-white px-4 py-2 text-sm font-medium hover:bg-red-700">
-                                <i class="fas fa-trash mr-2"></i>Delete
+                        </div>
+                    </div>
+                    <div class="flex items-center">  
+                        <a href="/create/newform">
+                            <button type="button" class="!rounded-button bg-custom px-4 py-2 text-white text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom">                        
+                                <i class="fas fa-plus mr-2"></i>Create New Form
                             </button>
-                        </div>               
+                        </a>                  
+                    </div>
+                </div>       
+             </div>
+        </nav>
+    
+        <main class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="md:flex md:items-center md:justify-between mb-8">            
+                <div class="flex-1 min-w-0">
+                    <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">                    
+                        Available Forms
+                    </h1>
+                </div>
+                <div class="mt-4 flex md:mt-0 md:ml-4">                
+                    <div class="relative rounded-md shadow-sm max-w-xs">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">                        
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input type="text" class="!rounded-button block w-full pl-10 sm:text-sm border-gray-300 focus:ring-custom focus:border-custom" placeholder="Search forms...">                
+                    </div>
+                    <div class="ml-3">
+                        <select class="!rounded-button block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-custom focus:border-custom sm:text-sm">                        
+                            <option>Sort by Name</option>
+                            <option>Sort by Date</option>
+                            <option>Sort by Responses</option>
+                        </select>
                     </div>
                 </div>
-            <% }); %>
-        </div>        
-
-        <div id="empty-state" class="hidden text-center py-12">
-            <div class="mx-auto h-48 w-48 mb-8">                
-                <img src="https://creatie.ai/ai/api/search-image?query=A 3D vector-style image with a clean, solid background color that contrasts significantly with the main theme. The content includes an empty folder or document icon in a friendly, modern style&width=192&height=192&orientation=squarish&removebg=true&flag=609a1f40-370f-4287-ba88-582a9eec8165" alt="No forms" class="w-full h-full object-contain">            
             </div>
-            <h3 class="mt-2 text-lg font-medium text-gray-900">No forms available</h3>
-            <p class="mt-1 text-sm text-gray-500">Get started by creating your first form</p>
-            <div class="mt-6">
-                <button class="!rounded-button bg-custom px-4 py-2 text-white text-sm font-medium hover:bg-indigo-700">                    
-                    <i class="fas fa-plus mr-2"></i>Create New Form
-                </button>
+    
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">            
+                <% forms.forEach(form => { %>
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="p-6">                    
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-file-alt text-custom text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-medium text-gray-900">
+                                        <%= form.title %>
+                                    </h3>
+                                    <p class="text-sm text-gray-500">Created At: <%= form.created.toString().split("GMT")[0].trim() %></p>
+                                </div>                    
+                            </div>
+                            <div class="mt-4">
+                                <p class="text-sm text-gray-600">32 responses • Active</p>                    
+                            </div>
+                            <div class="mt-6 flex space-x-3">
+                                <a href="/forms/<%= form._id %>">
+                                    <button class="!rounded-button flex-1 bg-custom text-white px-4 py-2 text-sm font-medium hover:bg-indigo-700">                           
+                                        <i class="fas fa-eye mr-2"></i>View Form
+                                    </button>
+                                </a> 
+                                <a href="/forms/<%= form._id %>/responses">
+                                    <button class="!rounded-button flex-1 bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium hover:bg-gray-200">                           
+                                        <i class="fas fa-chart-bar mr-2"></i>Responses
+                                    </button>
+                                </a>
+                                <!-- Delete Button -->
+                                <button onclick="confirmDelete('<%= form._id %>')" class="!rounded-button flex-1 bg-red-600 text-white px-4 py-2 text-sm font-medium hover:bg-red-700">
+                                    <i class="fas fa-trash mr-2"></i>Delete
+                                </button>
+                            </div>               
+                        </div>
+                    </div>
+                <% }); %>
+            </div>        
+    
+            <div id="empty-state" class="hidden text-center py-12">
+                <div class="mx-auto h-48 w-48 mb-8">                
+                    <img src="https://creatie.ai/ai/api/search-image?query=A 3D vector-style image with a clean, solid background color that contrasts significantly with the main theme. The content includes an empty folder or document icon in a friendly, modern style&width=192&height=192&orientation=squarish&removebg=true&flag=609a1f40-370f-4287-ba88-582a9eec8165" alt="No forms" class="w-full h-full object-contain">            
+                </div>
+                <h3 class="mt-2 text-lg font-medium text-gray-900">No forms available</h3>
+                <p class="mt-1 text-sm text-gray-500">Get started by creating your first form</p>
+                <div class="mt-6">
+                    <button class="!rounded-button bg-custom px-4 py-2 text-white text-sm font-medium hover:bg-indigo-700">                    
+                        <i class="fas fa-plus mr-2"></i>Create New Form
+                    </button>
+                </div>
             </div>
-        </div>
-    </main>   
+        </main> 
+    </div>  
     
     <script>
         function confirmDelete(formId) {

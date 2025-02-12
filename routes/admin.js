@@ -6,6 +6,7 @@ const Teacher = require("../models/Teacher");
 const Enquiry = require("../models/Enquiry");
 const Information = require("../models/Information");
 const Result = require("../models/Result");
+const Team = require("../models/Team");
 
 const multer = require('multer');
 const path = require('path');
@@ -259,6 +260,13 @@ router.put("/update/header/:id", async (req, res) => {
     }
   });
 
+// Show all result
+router.get('/show/all/results', async(req,res)=>{
+    const results = await Result.find();
+    res.render('admin/allResult.ejs',{results});
+  })
+
+//add new result
 router.get('/add/new/result', (req,res)=>{
   res.render('admin/newResult.ejs');
 })  
@@ -288,11 +296,6 @@ router.post('/add/new/result', upload.single("file"), async (req, res) => {
   }
 });  
 
-router.get('/show/all/results', async(req,res)=>{
-  const results = await Result.find();
-  res.render('admin/allResult.ejs',{results});
-})
-
 router.delete("/delete/result/:id", async (req, res) => {
   try {
     const image = await Result.findById(req.params.id);
@@ -304,6 +307,61 @@ router.delete("/delete/result/:id", async (req, res) => {
     }
     // Delete from MongoDB
     await Result.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "Image deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Deletion failed", error: error.message });
+  }
+});
+
+//Show all Team
+router.get('/show/all/team', async(req,res)=>{
+  const members = await Team.find();
+  res.render('admin/allTeam.ejs',{members});
+})
+
+//Add New Member
+router.get('/add/new/member', (req,res)=>{
+  res.render('admin/newTeam.ejs');
+})  
+
+//Post route to add new member
+router.post('/add/new/member', upload.single("file"), async (req, res) => {
+  try {
+    const { name,subject,experience,study } = req.body;
+    const result = await Upload.uploadFile(req.file.path);  // Use the path for Cloudinary upload
+    const imageUrl = result.secure_url;
+    fs.unlink(req.file.path, (err) => {
+      if (err) {
+        console.error('Error deleting local file:', err);
+      } else {
+        console.log('Local file deleted successfully');
+      }
+    });
+    const newTeam = new Team({
+      name,subject,experience,study,imageUrl,publicId:result.public_id
+    });
+    await newTeam.save();
+    req.flash('success_msg',"New Member Added Successfully !")
+    res.redirect("/add/new/member")
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Upload failed: ' + error.message });
+  }
+});  
+
+
+// Detele team member
+router.delete("/delete/team/member/:id", async (req, res) => {
+  try {
+    const image = await Team.findById(req.params.id);
+    if (!image) return res.status(404).json({ message: "Image not found" });
+    // Delete from Cloudinary
+    const cloudinaryResponse = await cloudinary.uploader.destroy(image.publicId);
+    if (cloudinaryResponse.result !== "ok") {
+      return res.status(400).json({ message: "Failed to delete from Cloudinary" });
+    }
+    // Delete from MongoDB
+    await Team.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: "Image deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Deletion failed", error: error.message });

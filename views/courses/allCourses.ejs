@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>All Courses</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet">   
+     <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="medium"></script>
+</head>
+<body class="bg-gray-50 font-[Inter]">
+
+   <%- include('../components/sidebar.ejs') %>
+
+    <main class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8" style="width: calc(100%-254px); margin-left: 254px; "  >        
+        <div class="mb-8">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl font-semibold text-gray-900">My Courses</h1>
+                <div class="flex space-x-4">
+                    <a href="/admin/addcourse">
+                        <button class="!rounded-button bg-custom text-white px-4 py-2 flex items-center">                        
+                            <i class="fas fa-th-large mr-2"></i>
+                            Add New Course
+                        </button>
+                    </a>
+                    <button class="!rounded-button border border-gray-300 px-4 py-2 flex items-center">                        
+                        <i class="fas fa-sort mr-2"></i>
+                        Sort
+                    </button>
+                </div>            
+            </div>
+
+            <div class="mt-6 flex flex-wrap gap-4">
+                <div class="bg-white rounded-lg p-4 flex items-center w-64">                    
+                    <div class="rounded-full bg-custom bg-opacity-10 p-3">
+                        <i class="fas fa-book text-custom text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-gray-500">Total Courses</p>                        
+                        <p class="text-xl font-semibold">12</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg p-4 flex items-center w-64">                    
+                    <div class="rounded-full bg-blue-100 p-3">
+                        <i class="fas fa-spinner text-blue-500 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-gray-500">In Progress</p>                        
+                        <p class="text-xl font-semibold">4</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg p-4 flex items-center w-64">                    
+                    <div class="rounded-full bg-green-100 p-3">
+                        <i class="fas fa-check text-green-500 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-gray-500">Completed</p>                        
+                        <p class="text-xl font-semibold">8</p>
+                    </div>
+                </div>
+            </div>        
+        </div>
+
+        <div class="mb-8">
+            <div class="flex items-center space-x-4 mb-6">
+                <div class="relative flex-1 max-w-lg">                    
+                    <input type="text" placeholder="Search courses..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-custom focus:border-custom">                    
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> 
+                
+                <%for(let i =0;i<courses.length;i++){%>
+
+                    <div class="bg-white rounded-lg overflow-hidden shadow-sm">
+                        <img src="<%= courses[i].thumbnail %>" alt="Course" class="w-full h-48 object-cover">                    
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold mb-2"><%= courses[i].title %></h3>                        
+                            <div class="flex items-center mb-4">
+                                <div class="flex-1 bg-gray-200 rounded-full h-2">                                
+                                    <div class="bg-custom rounded-full h-2" style="width: 75%"></div>
+                                </div>                            
+                                <span class="ml-2 text-sm text-gray-600">75%</span>
+                            </div>
+                            <div class="flex items-center justify-between">                            
+                                <span class="text-sm text-gray-500">Last accessed: 2 days ago</span>
+                                <button class="!rounded-button bg-custom text-white px-4 py-2">Continue</button>
+                            </div>
+                        </div>
+                    </div>
+
+                <%}%>
+
+            </div>
+        </div>    
+    </main>
+
+</body>
+</html>

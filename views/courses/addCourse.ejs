@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Course</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center">
+
+    <%- include('../components/sidebar.ejs') %>
+
+    <div class="mt-20 w-full max-w-4xl p-8 bg-white shadow-2xl rounded-lg" style="width: calc(100%-254px); margin-left: 254px;" >
+        <h2 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Course Details</h2>
+
+        <form action="/admin/post/new/course" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <div class="flex flex-col items-center">
+                <label class="block text-lg font-medium text-gray-700">Course Image</label>
+                <input type="file" name="image" id="imageUpload" class="mt-2 block w-full border border-gray-300 rounded-lg p-2" required>
+                <div class="mt-4">
+                    <img id="imagePreview" class="hidden w-64 h-40 object-cover rounded-lg border border-gray-300 shadow-md" />
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-lg font-medium text-gray-700">Course Title</label>
+                <input type="text" name="title" class="mt-2 block w-full border border-gray-300 rounded-lg p-3 shadow-sm" placeholder="Enter course title" required>
+            </div>
+    
+            <div>
+                <label class="block text-lg font-medium text-gray-700">Description</label>
+                <textarea name="description" rows="4" class="mt-2 block w-full border border-gray-300 rounded-lg p-3 shadow-sm" placeholder="Enter course description" required></textarea>
+            </div>
+    
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-lg font-medium text-gray-700">Price ($)</label>
+                    <input type="number" name="price" class="mt-2 block w-full border border-gray-300 rounded-lg p-3 shadow-sm" placeholder="Enter price" required>
+                </div>
+            </div>
+    
+            <div>
+                <label class="block text-lg font-medium text-gray-700">Category</label>
+                <select name="category" class="mt-2 block w-full border border-gray-300 rounded-lg p-3 shadow-sm" required>
+                    <option value="1st">1st</option>
+                    <option value="2nd">2nd</option>
+                    <option value="3rd">3rd</option>
+                    <option value="4th">4th</option>
+                    <option value="5th">5th</option>
+                    <option value="6th">6th</option>
+                    <option value="7th">7th</option>
+                    <option value="8th">8th</option>
+                    <option value="9th">9th</option>
+                    <option value="10th">10th</option>
+                    <option value="11th">11th</option>
+                    <option value="12th">12th</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-lg font-medium text-gray-700">Start Date</label>
+                <input type="date" class="mt-2 block w-full border border-gray-300 rounded-lg p-3 shadow-sm">
+            </div>
+    
+            <button type="submit" class="w-full bg-indigo-600 text-white text-lg font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-indigo-700 transition-all">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('imageUpload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('imagePreview');
+                    img.src = e.target.result;
+                    img.classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
