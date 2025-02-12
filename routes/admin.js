@@ -50,19 +50,33 @@ const Upload = {
   }
 };
 
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/user/login');
+}
+
+function isAdmin(req, res, next) {
+  if (req.isAuthenticated() && req.user.role === 'admin') {
+    return next();
+  }
+  res.render("./error/accessdenied.ejs");
+}
+
 // New form
-router.get("/create/newform", async  (req, res) => {
+router.get("/create/newform",ensureAuthenticated,isAdmin, async  (req, res) => {
     res.render("./admin/forms/createForm.ejs");
 });
 
 // All Forms
-router.get("/get/allforms", async  (req, res) => {
+router.get("/get/allforms", ensureAuthenticated,isAdmin,async  (req, res) => {
     const forms = await Form.find();
     res.render("./admin/forms/viewForms.ejs",{forms});
 });
 
 // Save New Form
-router.post("/create-form", async (req, res) => {
+router.post("/create-form",ensureAuthenticated,isAdmin, async (req, res) => {
     const { title, labels, types, required, options } = req.body;
     const fields = labels.map((label, index) => ({
         label,
@@ -77,13 +91,13 @@ router.post("/create-form", async (req, res) => {
 });
 
 // Show a Specific Form to Submit
-router.get("/forms/:id", async (req, res) => {
+router.get("/forms/:id",ensureAuthenticated,isAdmin, async (req, res) => {
     const form = await Form.findById(req.params.id);
     res.render("./admin/forms/submitForm", { form });
 });
 
 // Handle Form Submission
-router.post("/forms/:id", async (req, res) => {
+router.post("/forms/:id",ensureAuthenticated,isAdmin, async (req, res) => {
     const formId = req.params.id;
     const data = req.body;
     const response = new Response({ formId, data });
@@ -92,7 +106,7 @@ router.post("/forms/:id", async (req, res) => {
 });
 
 //Particular Form Data
-router.get("/forms/:formId/responses", async (req, res) => {
+router.get("/forms/:formId/responses",ensureAuthenticated,isAdmin, async (req, res) => {
     try {
         const formId = req.params.formId;
         const responses = await Response.find({ formId });
@@ -104,7 +118,7 @@ router.get("/forms/:formId/responses", async (req, res) => {
 });
 
 // Delete Form & Its Responses
-router.delete("/forms/:id/delete", async (req, res) => {
+router.delete("/forms/:id/delete",ensureAuthenticated,isAdmin, async (req, res) => {
     try {
         const form = await Form.findByIdAndDelete(req.params.id);
         if (!form) {
@@ -119,11 +133,11 @@ router.delete("/forms/:id/delete", async (req, res) => {
 });
 
 // Route to add a new teacher
-router.get("/add/new/teacher", async  (req, res) => {
+router.get("/add/new/teacher",ensureAuthenticated,isAdmin, async  (req, res) => {
     res.render("./admin/addTeacher.ejs");
 });
 
-router.post("/teachers/add/new", async (req, res) => {
+router.post("/teachers/add/new",ensureAuthenticated,isAdmin, async (req, res) => {
     try {
         const { name, subject, fatherName, mobileNumber, address, photo } = req.body;
 
@@ -145,7 +159,7 @@ router.post("/teachers/add/new", async (req, res) => {
 });
 
 //get all enquiries
-router.get("/get/all/enquiry", async (req, res) => {
+router.get("/get/all/enquiry",ensureAuthenticated,isAdmin, async (req, res) => {
     try {
       const enquiries = await Enquiry.find();
       res.render("admin/Enquiry.ejs",{enquiries})
@@ -155,7 +169,7 @@ router.get("/get/all/enquiry", async (req, res) => {
   });
   
 // update status of enquiry
-router.patch('/update-enquiry/:id', async (req, res) => {
+router.patch('/update-enquiry/:id',ensureAuthenticated,isAdmin, async (req, res) => {
     try {
         const enquiry = await Enquiry.findById(req.params.id);
         if (!enquiry) return res.status(404).json({ message: 'Enquiry not found' });
@@ -171,18 +185,18 @@ router.patch('/update-enquiry/:id', async (req, res) => {
 });  
 
 //Information
-router.get("/admin/information", async (req, res) => {
+router.get("/admin/information",ensureAuthenticated,isAdmin, async (req, res) => {
     try {
-    const info = await Information.find();
-    
-      res.render("admin/information.ejs",{information:info[0]})
+    const info = await Information.findOne();
+    const calendarUpdates = Object.fromEntries(info.updates.calendar);
+      res.render("admin/information.ejs",{information:info,calendarUpdates})
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
   });
 
 // Update Address
-router.put("/update-address/:id", async (req, res) => {
+router.put("/update-address/:id",ensureAuthenticated,isAdmin, async (req, res) => {
   try {
     const { address, city, state, zipCode, phone,establishedYear } = req.body;
     const updatedInfo = await Information.findByIdAndUpdate(
@@ -198,7 +212,7 @@ router.put("/update-address/:id", async (req, res) => {
 });
 
 // Update Principal Details
-router.put("/update-principal/:id", async (req, res) => {
+router.put("/update-principal/:id",ensureAuthenticated,isAdmin, async (req, res) => {
   try {
     const { name, email, phone } = req.body;
     const updatedInfo = await Information.findByIdAndUpdate(
@@ -213,7 +227,7 @@ router.put("/update-principal/:id", async (req, res) => {
 });
 
 // Update Social Media Links
-router.put("/update/social-media/:id", async (req, res) => {
+router.put("/update/social-media/:id",ensureAuthenticated,isAdmin, async (req, res) => {
   try {
     const { facebook, twitter, instagram, linkedin, email } = req.body;
     const updatedInfo = await Information.findByIdAndUpdate(
@@ -228,23 +242,8 @@ router.put("/update/social-media/:id", async (req, res) => {
   }
 });
 
-// Update Calendar and Latest Updates
-router.put("/update-updates/:id", async (req, res) => {
-  try {
-    const { calander, latestUpdates, headerUpdates } = req.body;
-    const updatedInfo = await Information.findByIdAndUpdate(
-      req.params.id,
-      { updates: { calander, latestUpdates, headerUpdates } },
-      { new: true }
-    );
-    res.json(updatedInfo);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
 // Update Header
-router.put("/update/header/:id", async (req, res) => {
+router.put("/update/header/:id",ensureAuthenticated,isAdmin, async (req, res) => {
     try {
       const {id} = req.params; 
       const{ update } = req.body;
@@ -254,25 +253,169 @@ router.put("/update/header/:id", async (req, res) => {
         { new: true }
       );
       req.flash('success_msg',"Header Details Updated Successfully")
-    res.redirect('/admin/information')
+      res.redirect('/admin/information')
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   });
 
+
+// POST route to add an event to the calendar
+router.post("/updates/add/new", async (req, res) => {
+  try {
+    const { incident, instant } = req.body;
+    if (!incident || !instant) {
+      return res.status(400).json({ message: "Both eventDate and eventDescription are required!" });
+    }
+    const eventId = `incident_${Date.now()}`;
+    // Construct update object
+    const update = {};
+    update[`updates.calendar.${eventId}`] = { instant, incident };
+    // Update the only document in Information collection
+    const result = await Information.findOneAndUpdate(
+      {}, // Find the only document
+      { $set: update }, // Add event
+      { new: true, upsert: true } // Create if not found
+    );
+    res.status(200).json({ message: "Event added successfully!", data: result.updates.calendar });
+  } catch (error) {
+    console.error("Error adding event:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
+
+
+// router.post("/updates/add/new", async (req, res) => {
+//     try {
+//       const { instant, incident } = req.body;
+//         let info = await Information.findOne(); // Get the first document
+//         const updatedCalander = info.updates.calander.push({instant, incident})
+//         // info.updates.calendar = {  }; // Overwrites existing calendar data
+//         await updatedCalander.save();
+//         req.flash('success_msg',"Latest Updates Updated Successfully")
+//         res.redirect('/admin/information')
+//     } catch (error) {
+//         res.status(500).json({ message: "Error adding update", error });
+//     }
+// });
+
+router.delete("/updates/delete/:index", async (req, res) => {
+    try {
+        const { index } = req.params;
+
+        const info = await Information.findOne();
+        if (!info || info.updates.latestUpdates.length === 0) {
+            return res.status(404).json({ message: "No updates found to delete" });
+        }
+
+        const updateIndex = parseInt(index);
+        if (updateIndex < 0 || updateIndex >= info.updates.latestUpdates.length) {
+            return res.status(400).json({ message: "Invalid index" });
+        }
+
+        info.updates.latestUpdates.splice(updateIndex, 1);
+        await info.save();
+
+        res.status(200).json({ message: "Update deleted successfully", latestUpdates: info.updates.latestUpdates });
+    } catch (error) {
+        res.status(500).json({ message: "Error deleting update", error });
+    }
+});
+
+// Add or Update Calendar Entry**
+// router.post("/updates/add/new", async (req, res) => {
+//   console.log("hello")
+//     try {
+//         const { instant, incident } = req.body;
+//         if (!instant || !incident) {
+//             return res.status(400).json({ message: "Both instant and incident are required" });
+//         }
+//         let info = await Information.findOne();
+//         if (!info) {
+//             info = new Information({ updates: { calendar: {} } });
+//         }
+//         info.updates.calendar = { instant, incident }; // Overwrites existing calendar data
+//         await info.save();
+//         res.status(200).json({ message: "Calendar updated successfully", calendar: info.updates.calendar });
+//     } catch (error) {
+//         console.log(error)
+//         res.status(500).json({ message: "Error updating calendar", error });
+//     }
+// });
+
+//Delete Calendar Entry**
+// app.delete("/updates/calendar/delete", async (req, res) => {
+//     try {
+//         let info = await Information.findOne();
+//         if (!info || !info.updates.calendar) {
+//             return res.status(404).json({ message: "No calendar entry found to delete" });
+//         }
+//         info.updates.calendar = { instant: "", incident: "" }; // Reset calendar
+//         await info.save();
+//         res.status(200).json({ message: "Calendar entry deleted successfully", calendar: info.updates.calendar });
+//     } catch (error) {
+//         res.status(500).json({ message: "Error deleting calendar entry", error });
+//     }
+// });
+
+// ✅ **3. Add an Update to latestUpdates**
+router.post("/updates/latest/add", async (req, res) => {
+    try {
+        const { update } = req.body;
+        if (!update) {
+            return res.status(400).json({ message: "Update text is required" });
+        }
+        let info = await Information.findOne();
+        if (!info) {
+            info = new Information({ updates: { latestUpdates: [] } });
+        }
+        info.updates.latestUpdates.push(update);
+        await info.save();
+        res.status(200).json({ message: "Update added successfully", latestUpdates: info.updates.latestUpdates });
+    } catch (error) {
+        res.status(500).json({ message: "Error adding update", error });
+    }
+});
+
+// ✅ **4. Delete an Update from latestUpdates by Index**
+router.delete("/updates/latest/delete/:index", async (req, res) => {
+    try {
+        const { index } = req.params;
+
+        const info = await Information.findOne();
+        if (!info || info.updates.latestUpdates.length === 0) {
+            return res.status(404).json({ message: "No updates found to delete" });
+        }
+
+        const updateIndex = parseInt(index);
+        if (updateIndex < 0 || updateIndex >= info.updates.latestUpdates.length) {
+            return res.status(400).json({ message: "Invalid index" });
+        }
+
+        info.updates.latestUpdates.splice(updateIndex, 1);
+        await info.save();
+
+        res.status(200).json({ message: "Update deleted successfully", latestUpdates: info.updates.latestUpdates });
+    } catch (error) {
+        res.status(500).json({ message: "Error deleting update", error });
+    }
+});
+
 // Show all result
-router.get('/show/all/results', async(req,res)=>{
+router.get('/show/all/results',ensureAuthenticated,isAdmin, async(req,res)=>{
     const results = await Result.find();
     res.render('admin/allResult.ejs',{results});
   })
 
 //add new result
-router.get('/add/new/result', (req,res)=>{
+router.get('/add/new/result',ensureAuthenticated,isAdmin, (req,res)=>{
   res.render('admin/newResult.ejs');
 })  
 
 //Add Our Result
-router.post('/add/new/result', upload.single("file"), async (req, res) => {
+router.post('/add/new/result',ensureAuthenticated,isAdmin, upload.single("file"), async (req, res) => {
   try {
     const { name,exam,year } = req.body;
     const result = await Upload.uploadFile(req.file.path);  // Use the path for Cloudinary upload
@@ -296,7 +439,7 @@ router.post('/add/new/result', upload.single("file"), async (req, res) => {
   }
 });  
 
-router.delete("/delete/result/:id", async (req, res) => {
+router.delete("/delete/result/:id",ensureAuthenticated,isAdmin, async (req, res) => {
   try {
     const image = await Result.findById(req.params.id);
     if (!image) return res.status(404).json({ message: "Image not found" });
@@ -314,18 +457,18 @@ router.delete("/delete/result/:id", async (req, res) => {
 });
 
 //Show all Team
-router.get('/show/all/team', async(req,res)=>{
+router.get('/show/all/team',ensureAuthenticated,isAdmin, async(req,res)=>{
   const members = await Team.find();
   res.render('admin/allTeam.ejs',{members});
 })
 
 //Add New Member
-router.get('/add/new/member', (req,res)=>{
+router.get('/add/new/member',ensureAuthenticated,isAdmin, (req,res)=>{
   res.render('admin/newTeam.ejs');
 })  
 
 //Post route to add new member
-router.post('/add/new/member', upload.single("file"), async (req, res) => {
+router.post('/add/new/member',ensureAuthenticated,isAdmin, upload.single("file"), async (req, res) => {
   try {
     const { name,subject,experience,study } = req.body;
     const result = await Upload.uploadFile(req.file.path);  // Use the path for Cloudinary upload
@@ -351,7 +494,7 @@ router.post('/add/new/member', upload.single("file"), async (req, res) => {
 
 
 // Detele team member
-router.delete("/delete/team/member/:id", async (req, res) => {
+router.delete("/delete/team/member/:id",ensureAuthenticated,isAdmin, async (req, res) => {
   try {
     const image = await Team.findById(req.params.id);
     if (!image) return res.status(404).json({ message: "Image not found" });

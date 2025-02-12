@@ -98,9 +98,9 @@ app.get("/", async (req, res) => {
     // if(req.user){
     //     res.redirect('/admin')
     // }
-    const info = await Information.find();
-    const information = info[0]
-    res.render("index",{information});
+    const information = await Information.findOne();
+    const calendarUpdates = Object.fromEntries(information.updates.calendar);
+    res.render("index",{information,calendarUpdates});
 });
 
 app.get("/admin", async (req, res) => {

@@ -13,6 +13,9 @@ const courseSchema = new mongoose.Schema({
     studentClass: {
         type: String,
     },
+    notices: {
+        type: Array,
+    },
     price: {
         type: Number,
     },

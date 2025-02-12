@@ -3,8 +3,23 @@ const Student = require("../models/Student");
 const Exam = require('../models/Exam')
 const router = express.Router();
 
+
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.redirect('/user/login');
+  }
+  
+  function isAdmin(req, res, next) {
+    if (req.isAuthenticated() && req.user.role === 'admin') {
+      return next();
+    }
+    res.render("./error/accessdenied.ejs");
+  }
+
 // Add a new student with fee details
-router.post("/add-student", async (req, res) => {
+router.post("/add-student",ensureAuthenticated, async (req, res) => {
     try {
         const { name, fatherName, studentClass, mobileNumber, address, photo, feeDetails } = req.body;
 
@@ -26,7 +41,7 @@ router.post("/add-student", async (req, res) => {
 });
 
 // Get all students
-router.get("/students", async (req, res) => {
+router.get("/students",ensureAuthenticated, async (req, res) => {
     try {
         const students = await Student.find(); // Fetch all students from MongoDB
         req.flash('success',"Hello Dear")
@@ -37,7 +52,7 @@ router.get("/students", async (req, res) => {
 });
 
 //Add Student
-router.get("/add/new/student", async (req, res) => {
+router.get("/add/new/student",ensureAuthenticated, async (req, res) => {
     try {
         res.render("addStudent.ejs"); // Pass data to the EJS template
     } catch (error) {
@@ -45,7 +60,7 @@ router.get("/add/new/student", async (req, res) => {
     }
 });
 
-router.post("/add/new/student", async (req, res) => {
+router.post("/add/new/student",ensureAuthenticated, async (req, res) => {
     try {
         const { name, fatherName, studentClass, mobileNumber, address, admissionCharges, annualCharges, developmentCharges, monthlyFees } = req.body;
         
@@ -72,7 +87,7 @@ router.post("/add/new/student", async (req, res) => {
 });
 
 // Add fee details
-router.get("/student/edit/fees/:id", async (req, res) => {
+router.get("/student/edit/fees/:id",ensureAuthenticated, async (req, res) => {
     try {
         const {id} = req.params
         const student = await Student.findById(id)
@@ -82,7 +97,7 @@ router.get("/student/edit/fees/:id", async (req, res) => {
     }
 });
 
-router.post("/add/new/payment/:id", async (req, res) => {
+router.post("/add/new/payment/:id",ensureAuthenticated, async (req, res) => {
     try {
         const{amount} = req.body;
         const {id} = req.params;
@@ -119,7 +134,7 @@ router.post("/add/new/payment/:id", async (req, res) => {
 });
 
 // Delete Student
-router.delete("/delete/student/:id", async (req, res) => {
+router.delete("/delete/student/:id",ensureAuthenticated, async (req, res) => {
     try {
         const { id } = req.params;
         const student = await Student.findById(id);
@@ -135,7 +150,6 @@ router.delete("/delete/student/:id", async (req, res) => {
         res.status(500).send(error.message);
     }
 });
-
 
 //Result Routes
 router.get("/result", async (req, res) => {

@@ -53,60 +53,32 @@
                 
                 <div class="bg-white rounded-lg shadow-sm h-[600px] overflow-y-auto">                    
                     <div class="space-y-4 p-6 animate-scroll-calander">
-                        <div class="flex gap-4 items-start">
-                            <div class="bg-custom text-white p-3 rounded min-w-[120px] text-center">                                
-                                <div class="text-sm">03 Feb</div>
-                                <div class="font-semibold">2025</div>                            
+
+                        <% if (calendarUpdates && Object.keys(calendarUpdates).length > 0) { %>
+                                    <% Object.entries(calendarUpdates).forEach(([eventId, event]) => { %>
+                                        <div class="flex gap-4 items-start">
+                                            <div class="bg-custom text-white p-3 rounded min-w-[120px] text-center">                                
+                                                <div class="text-sm"><%= event.instant %></div>                          
+                                            </div>
+                                            <div class="flex-grow">
+                                                <h3 class="font-medium"><%= event.incident %></h3>
+                                               
+                                            </div>                        
+                                        </div>
+                                    <% }) %>
+                            </table>
+                        <% } else { %>
+                            <div class="flex gap-4 items-start">
+                                <div class="bg-custom text-white p-3 rounded min-w-[120px] text-center">                                
+                                    <div class="text-sm">None</div>                          
+                                </div>
+                                <div class="flex-grow">
+                                    <h3 class="font-medium">No Information Available.</h3>
+                                   
+                                </div>                        
                             </div>
-                            <div class="flex-grow">
-                                <h3 class="font-medium">Pre Board 2 Examinations</h3>
-                                <p class="text-gray-600 text-sm">For Class X and XII students</p>
-                            </div>                        
-                        </div>
+                        <% } %>
                         
-                        <div class="flex gap-4 items-start">
-                            <div class="bg-custom text-white p-3 rounded min-w-[120px] text-center">                                
-                                <div class="text-sm">05 Feb</div>
-                                <div class="font-semibold">2025</div>                            
-                            </div>
-                            <div class="flex-grow">
-                                <h3 class="font-medium">Science Exhibition</h3>
-                                <p class="text-gray-600 text-sm">For Classes VI-VIII</p>
-                            </div>                        
-                        </div>
-                        
-                        <div class="flex gap-4 items-start">
-                            <div class="bg-custom text-white p-3 rounded min-w-[120px] text-center">                                
-                                <div class="text-sm">10 Feb</div>
-                                <div class="font-semibold">2025</div>                            
-                            </div>
-                            <div class="flex-grow">
-                                <h3 class="font-medium">Parent Teacher Meeting</h3>
-                                <p class="text-gray-600 text-sm">For Classes VI-XII</p>
-                            </div>                        
-                        </div>
-                        
-                        <div class="flex gap-4 items-start">
-                            <div class="bg-custom text-white p-3 rounded min-w-[120px] text-center">                               
-                                 <div class="text-sm">15 Feb</div>
-                                <div class="font-semibold">2025</div>                            
-                            </div>
-                            <div class="flex-grow">
-                                <h3 class="font-medium">Annual Sports Day</h3>
-                                <p class="text-gray-600 text-sm">All students must participate</p>
-                            </div>                        
-                        </div>
-                        
-                        <div class="flex gap-4 items-start">
-                            <div class="bg-custom text-white p-3 rounded min-w-[120px] text-center">                                
-                                <div class="text-sm">20 Feb</div>
-                                <div class="font-semibold">2025</div>                            
-                            </div>
-                            <div class="flex-grow">
-                                <h3 class="font-medium">Annual Day Celebrations</h3>
-                                <p class="text-gray-600 text-sm">Cultural performances and prize distribution</p>                            
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>        

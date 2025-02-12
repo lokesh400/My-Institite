@@ -4,14 +4,29 @@ const Student = require("../models/Student");
 const Teacher = require("../models/Teacher");
 const Exam = require('../models/Exam')
 
+
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.redirect('/user/login');
+  }
+  
+  function isAdmin(req, res, next) {
+    if (req.isAuthenticated() && req.user.role === 'admin') {
+      return next();
+    }
+    res.render("./error/accessdenied.ejs");
+  }
+
 // Manage Teachers
-router.get("/manage/teachers", async  (req, res) => {
+router.get("/manage/teachers",ensureAuthenticated, async  (req, res) => {
     const teachers = await Teacher.find();
     res.render("manageTeachers.ejs",{teachers});
 });
 
 // delete teacher
-router.delete("/delete/teacher/:id", async (req, res) => {
+router.delete("/delete/teacher/:id",ensureAuthenticated, async (req, res) => {
     try {
         const { id } = req.params;
         await Teacher.findByIdAndDelete(id);
@@ -24,7 +39,7 @@ router.delete("/delete/teacher/:id", async (req, res) => {
 });
 
 //Teacher Details
-router.get("/teacher/payment/:id", async (req, res) => {
+router.get("/teacher/payment/:id",ensureAuthenticated, async (req, res) => {
     try {
         const {id} = req.params
         const student = await Teacher.findById(id)
@@ -35,7 +50,7 @@ router.get("/teacher/payment/:id", async (req, res) => {
 });
 
 //Add teacher payments
-router.post("/add/new/teacher/payment/:id", async (req, res) => {
+router.post("/add/new/teacher/payment/:id",ensureAuthenticated, async (req, res) => {
     try {
         const{amount} = req.body;
         const {id} = req.params;
@@ -66,11 +81,11 @@ router.post("/add/new/teacher/payment/:id", async (req, res) => {
     }
 });
 
-router.get("/teacher", async (req, res) => {
+router.get("/teacher",ensureAuthenticated, async (req, res) => {
     res.render("./teacher/teacherIndex.ejs");
 });
 
-router.post("/submit-grade", async (req, res) => {
+router.post("/submit-grade",ensureAuthenticated, async (req, res) => {
     try {
         const {grade} = req.body;
         const students = await Student.find({ studentClass: grade }); // Find students by class
@@ -85,7 +100,7 @@ router.post("/submit-grade", async (req, res) => {
 });
 
 
-router.post("/upload/marks/:count", async (req, res) => {
+router.post("/upload/marks/:count",ensureAuthenticated, async (req, res) => {
     const { count } = req.params;
     const titleName = "Midterm Results";
     for (let i = 0; i < count; i++) {

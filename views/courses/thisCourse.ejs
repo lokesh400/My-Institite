@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Batch Portal - Home</title>
+    <title><%= course.title %></title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
     <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet"/>
@@ -15,13 +15,15 @@
                 <div class="flex">
                     <div class="flex-shrink-0 flex items-center">
                         <img class="h-8 w-auto" src="https://ai-public.creatie.ai/gen_page/logo_placeholder.png" alt="Batch Logo"/>
-                        <span class="ml-3 text-xl font-semibold text-gray-900">Computer Science Batch 2024</span>
+                        <span class="ml-3 text-xl font-semibold text-gray-900"><%= course.title %></span>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <button class="!rounded-button bg-custom text-white px-4 py-2 text-sm font-medium">
-                        <i class="fas fa-user-circle mr-2"></i>My Profile
-                    </button>
+                    <a href="/teacher">
+                        <button class="!rounded-button bg-custom text-white px-4 py-2 text-sm font-medium">
+                            <i class="fas fa-user-circle mr-2"></i>My Profile
+                        </button>
+                    </a>
                 </div>
             </div>
         </nav>
@@ -30,44 +32,29 @@
         <div class="grid grid-cols-1 gap-6">
             <!-- Notice Board -->
             <div class="bg-white rounded-lg shadow h-full w-full">
-                <button class="w-full px-6 py-4 flex items-center justify-between text-left" onclick="toggleSection(&#39;notices&#39;)">
+                <button class="w-full px-6 py-4 flex items-center justify-between text-left" onclick="toggleSection('notices')">
                     <h2 class="text-lg font-semibold text-gray-900">
                         <i class="fas fa-bullhorn mr-2 text-custom"></i>Notice Board
                     </h2>
                     <i class="fas fa-chevron-down text-gray-500 transform transition-transform" id="notices-icon"></i>
                 </button>
-                <div id="notices" class="px-6 pb-6 space-y-4">
-                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0">
-                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-custom">
-                                    <i class="fas fa-exclamation text-white"></i>
-                                </span>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-sm font-medium text-gray-900">Mid-term Examination Schedule Released</h3>
-                                <p class="mt-1 text-sm text-gray-500">The mid-term examinations will be conducted from March 15th to March 25th, 2024.</p>
+
+                <%for(let i=0;i<course.notices.length;i++){%>
+                    <div id="notices" class="px-6 pb-6 space-y-4">
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <div class="flex items-start">
+                                <div class="ml-4">
+                                    <h3 class="text-sm font-medium text-gray-900"><%= [i] %></h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0">
-                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-green-100">
-                                    <i class="fas fa-check text-green-600"></i>
-                                </span>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-sm font-medium text-gray-900">Project Submission Deadline Extended</h3>
-                                <p class="mt-1 text-sm text-gray-500">The deadline for submitting the Database Management System project has been extended to March 10th, 2024.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    </div>                
+                <%}%>
+
             </div>
             <!-- PDF Resources -->
             <div class="bg-white rounded-lg shadow h-full w-full">
-                <button class="w-full px-6 py-4 flex items-center justify-between text-left" onclick="toggleSection(&#39;resources&#39;)">
+                <button class="w-full px-6 py-4 flex items-center justify-between text-left" onclick="toggleSection('resources')">
                     <h2 class="text-lg font-semibold text-gray-900">
                         <i class="fas fa-file-pdf mr-2 text-custom"></i>PDF Resources
                     </h2>
@@ -115,7 +102,7 @@
             
             <!-- Events Calendar -->
             <div class="bg-white rounded-lg shadow h-full w-full">
-                <button class="w-full px-6 py-4 flex items-center justify-between text-left" onclick="toggleSection(&#39;events&#39;)">
+                <button class="w-full px-6 py-4 flex items-center justify-between text-left" onclick="toggleSection('events')">
                     <h2 class="text-lg font-semibold text-gray-900">
                         <i class="fas fa-calendar-check mr-2 text-custom"></i>Upcoming Events
                     </h2>

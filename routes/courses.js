@@ -87,6 +87,14 @@ router.post("/admin/post/new/course", upload.single("image"), async (req, res) =
       }
 });
 
+// Particular Batch
+router.get('/show/this/batch/:id', async(req,res)=>{
+    const {id} = req.params;
+    const course = await Course.findById(id);
+    res.render('courses/thisCourse.ejs',{course});
+  })
+
+
 
 
 
