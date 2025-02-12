@@ -25,7 +25,9 @@ const sessionOptions = require("./config/sessionConfig");
 const Student = require("./models/Student");
 const User = require('./models/User');
 const Enquiry = require('./models/Enquiry');
-const Information = require('./models/Information')
+const Information = require('./models/Information');
+const Result = require('./models/Result');
+const Team = require('./models/Team')
 
 // Connect to MongoDB
 mongoose.connect("mongodb://localhost:27017/myDatabase")
@@ -99,8 +101,10 @@ app.get("/", async (req, res) => {
     //     res.redirect('/admin')
     // }
     const information = await Information.findOne();
+    const result = await Result.find();
+    const team = await Team.find();
     const calendarUpdates = Object.fromEntries(information.updates.calendar);
-    res.render("index",{information,calendarUpdates});
+    res.render("index",{information,calendarUpdates,result,team});
 });
 
 app.get("/admin", async (req, res) => {

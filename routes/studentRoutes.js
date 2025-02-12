@@ -3,7 +3,6 @@ const Student = require("../models/Student");
 const Exam = require('../models/Exam')
 const router = express.Router();
 
-
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
       return next();

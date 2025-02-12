@@ -212,17 +212,30 @@ router.put("/update-address/:id",ensureAuthenticated,isAdmin, async (req, res) =
 });
 
 // Update Principal Details
-router.put("/update-principal/:id",ensureAuthenticated,isAdmin, async (req, res) => {
+router.put("/update-principal", async (req, res) => {
   try {
-    const { name, email, phone } = req.body;
-    const updatedInfo = await Information.findByIdAndUpdate(
-      req.params.id,
-      { principal: { name, email, phone } },
-      { new: true }
-    );
-    res.json(updatedInfo);
+      console.log("Received Request Body:", req.body); // Debugging log
+      const { name, email, phone } = req.body;
+      if (!name || !email || !phone) {
+          return res.status(400).json({ message: "All principal fields (name, email, phone) are required" });
+      }
+      const updatedInfo = await Information.findOneAndUpdate(
+          {}, // Find any document (assuming there's only one)
+          {
+              $set: {
+                  "principal.name": name,
+                  "principal.email": email.toLowerCase(), // Ensure email is lowercase
+                  "principal.phone": phone
+              }
+          },
+          { new: true, upsert: true } // Return updated document, create if not exists
+      );
+      req.flash('success_msg',"Principal Details Updated Successfully")
+      res.redirect('/admin/information')
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+      console.error("Error updating principal:", error.message);
+      res.status(500).json({ message: "Server error", error: error.message });
   }
 });
 
@@ -242,22 +255,25 @@ router.put("/update/social-media/:id",ensureAuthenticated,isAdmin, async (req, r
   }
 });
 
-// Update Header
-router.put("/update/header/:id",ensureAuthenticated,isAdmin, async (req, res) => {
+// Update headerUpdates
+router.put("/update/header/:id", async (req, res) => {
     try {
-      const {id} = req.params; 
       const{ update } = req.body;
-      const updatedInfo = await Information.findByIdAndUpdate(
-        id,
-        { updates: { headerUpdates: update } },
-        { new: true }
-      );
-      req.flash('success_msg',"Header Details Updated Successfully")
-      res.redirect('/admin/information')
+      console.log(update)
+        if (!update) {
+            return res.status(400).json({ message: "Header updates cannot be empty" });
+        }
+        const updatedInfo = await Information.findOneAndUpdate(
+            {}, // Find any document (assuming there's only one)
+            { $set: { "updates.headerUpdates": update } },
+            { new: true, upsert: true } // Return updated document, create if not exists
+        );
+        req.flash('success_msg',"Header Details Updated Successfully")
+        res.redirect('/admin/information')
     } catch (error) {
-      res.status(500).json({ error: error.message });
+        res.status(500).json({ message: "Server error", error: error.message });
     }
-  });
+});
 
 
 // POST route to add an event to the calendar
@@ -277,11 +293,32 @@ router.post("/updates/add/new", async (req, res) => {
       { $set: update }, // Add event
       { new: true, upsert: true } // Create if not found
     );
-    res.status(200).json({ message: "Event added successfully!", data: result.updates.calendar });
+        req.flash('success_msg',"Calander Details Updated Successfully")
+        res.redirect('/admin/information')
   } catch (error) {
     console.error("Error adding event:", error);
     res.status(500).json({ message: "Internal server error" });
   }
+});
+
+// DELETE Route to remove a calendar event
+router.delete("/calendar/:eventId", async (req, res) => {
+    try {
+        const { eventId } = req.params;
+        const updatedInfo = await Information.findOneAndUpdate(
+            {}, // Assuming a single document
+            { $unset: { [`updates.calendar.${eventId}`]: "" } }, // Remove event
+            { new: true } // Return updated document
+        );
+        if (!updatedInfo) {
+            return res.status(404).json({ message: "No document found" });
+        }
+        req.flash('success_msg',"Calander Details Deleted Successfully")
+        res.redirect('/admin/information')
+    } catch (error) {
+        console.error("Error deleting event:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
 });
 
 
