@@ -7,12 +7,14 @@ const Enquiry = require("../models/Enquiry");
 const Information = require("../models/Information");
 const Result = require("../models/Result");
 const Team = require("../models/Team");
+const Student = require('../models/Student')
 
 const multer = require('multer');
 const path = require('path');
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
 const { error } = require("console");
+router.use(express.urlencoded({ extended: true })); 
 
 cloudinary.config({
     cloud_name:process.env.cloud_name, 
@@ -547,6 +549,34 @@ router.delete("/delete/team/member/:id",ensureAuthenticated,isAdmin, async (req,
     res.status(500).json({ message: "Deletion failed", error: error.message });
   }
 });
+
+
+
+
+
+//ID card
+router.get("/print",ensureAuthenticated,isAdmin, async (req, res) => {
+  try {
+      // const formId = req.params.formId;
+      // const responses = await Response.find({ formId });
+      res.render("./admin/printIdcard.ejs");
+  } catch (error) {
+      res.status(500).send("Error fetching responses");
+  }
+});
+
+
+router.post("/print/id", upload.none(), async (req, res) => {
+  try {
+      const students = await Student.find({ studentClass: req.body.grade });
+      res.json(students);
+  } catch (error) {
+      console.error("Error fetching students:", error);
+      res.status(500).send('Server Error');
+  }
+});
+
+
 
 
 module.exports = router;

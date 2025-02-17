@@ -3,6 +3,70 @@ const Student = require("../models/Student");
 const Exam = require('../models/Exam')
 const router = express.Router();
 
+
+
+const multer = require('multer');
+const path = require('path');
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
+const { error } = require("console");
+
+cloudinary.config({
+    cloud_name:process.env.cloud_name, 
+    api_key:process.env.api_key, 
+    api_secret:process.env.api_secret
+});
+
+// Multer disk storage configuration
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // Save files to 'uploads/' folder
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname.replace(/\s+/g, "_"));
+  }  
+});
+
+// Initialize multer with diskStorage
+const upload = multer({ storage: storage });
+
+// Function to upload files to Cloudinary
+// const Upload = {
+//   uploadFile: async (filePath) => {
+//     try {
+//       // Upload the file to Cloudinary
+//       const result = await cloudinary.uploader.upload(filePath, {
+//         resource_type: "auto", // Auto-detect file type (image, video, etc.)
+//       });
+//       return result;
+//     } catch (error) {
+//       throw new Error('Upload failed: ' + error.message);
+//     }
+//   }
+// };
+
+const Upload = {
+    uploadFile: async (filePath) => {
+      try {
+        const result = await cloudinary.uploader.upload(filePath, {
+          resource_type: "auto",
+        });
+  
+        // Delete local file after successful upload
+        fs.unlink(filePath, (err) => {
+          if (err) console.error("Error deleting local file:", err);
+        });
+  
+        return result;
+      } catch (error) {
+        console.error("Cloudinary Upload Error:", error);
+        throw new Error("Upload failed: " + error.message);
+      }
+    }
+  };
+  
+
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
       return next();
@@ -15,29 +79,8 @@ function ensureAuthenticated(req, res, next) {
       return next();
     }
     res.render("./error/accessdenied.ejs");
-  }
+  } 
 
-// Add a new student with fee details
-router.post("/add-student",ensureAuthenticated, async (req, res) => {
-    try {
-        const { name, fatherName, studentClass, mobileNumber, address, photo, feeDetails } = req.body;
-
-        const student = new Student({
-            name,
-            fatherName,
-            class: studentClass,
-            mobileNumber,
-            address,
-            photo,
-            feeDetails
-        });
-
-        await student.save();
-        res.status(201).json({ message: "Student added successfully!", student });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
 
 // Get all students
 router.get("/students",ensureAuthenticated, async (req, res) => {
@@ -59,15 +102,19 @@ router.get("/add/new/student",ensureAuthenticated, async (req, res) => {
     }
 });
 
-router.post("/add/new/student",ensureAuthenticated, async (req, res) => {
+router.post("/add/new/student",ensureAuthenticated,upload.single("image"), async (req, res) => {
     try {
         const { name, fatherName, studentClass, mobileNumber, address, admissionCharges, annualCharges, developmentCharges, monthlyFees } = req.body;
-        
+        const result = await Upload.uploadFile(req.file.path);  // Use the path for Cloudinary upload
+        const photo = result.secure_url;
+        const publicId = result.public_id
         const student = new Student({
             name,
             fatherName,
             studentClass,
             mobileNumber,
+            photo,
+            publicId,
             address,
             feeDetails: {
                 admissionCharges,
@@ -84,6 +131,9 @@ router.post("/add/new/student",ensureAuthenticated, async (req, res) => {
         res.status(500).send("Server Error");
     }
 });
+
+
+
 
 // Add fee details
 router.get("/student/edit/fees/:id",ensureAuthenticated, async (req, res) => {

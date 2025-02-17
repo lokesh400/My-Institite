@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printable A4 Layout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            body {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            form{
+                display: none;
+            }
+            .absolute{
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="items-center justify-center min-h-screen bg-gray-100">
+
+    <form id="myForm" action="grade" class="bg-white p-6 rounded shadow-lg w-96" style="margin: auto;"  >
+        <h2 class="text-xl font-bold mb-4">Submit Form</h2>
+    
+        <select name="grade" id="grade" required style="width: 90%; height: 40px; border-bottom: 1px solid black; margin-bottom: 5px; " >
+            <option value="1st">1st</option>
+            <option value="2nd">2nd</option>
+            <option value="3rd">3rd</option>
+            <option value="4th">4th</option>
+            <option value="5th">5th</option>
+            <option value="6th">6th</option>
+            <option value="7th">7th</option>
+            <option value="8th">8th</option>
+            <option value="9th">9th</option>
+            <option value="10th">10th</option>
+            <option value="11th">11th</option>
+            <option value="12th">12th</option>
+        </select>
+        
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Submit
+        </button>
+    </form>
+
+    <div id="studentCardsContainer" class="w-[210mm]" style="margin:auto" >
+
+    </div>
+    <script>
+        function printPage() {
+            window.print();
+        }
+    </script>
+    <button onclick="printPage()" class="absolute top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded shadow-lg hover:bg-blue-700">Print</button>
+
+    <script>
+        document.getElementById("myForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+
+            try {
+                let response = await fetch("/print/id", {
+                    method: "POST",
+                    body: formData
+                });
+                const students = await response.json();
+
+                renderStudentCards(students);
+
+            } catch (error) {
+                document.getElementById("responseMessage").innerHTML = 
+                    `<p class="text-red-600 font-bold">Error submitting form!</p>`;
+            }
+
+            function renderStudentCards(students) {
+    const container = document.getElementById("studentCardsContainer");
+
+    // Clear previous content
+    container.innerHTML = "";
+
+    // Create a grid to display the student cards
+    const grid = document.createElement("div");
+    grid.className = "w-[210mm] h-[297mm] bg-white p-4 grid grid-cols-2 grid-rows-5 gap-2 border border-gray-300 shadow-lg";
+
+    students.forEach((student) => {
+        const card = document.createElement("div");
+        card.className = "flex-1 bg-blue-200 p-4 border";
+        // Add student details to the card
+        card.innerHTML = `
+                <div class="font-bold text-lg text-center">My Institute Pvt Ltd</div>
+            <div style="display:flex" >
+                <div>
+                    <div class="font-sm text-lg"><strong>Name:</strong> ${student.name}</div>
+                    <div class="text-sm text-gray-700"><strong>Father:</strong> ${student.fatherName}</div>
+                    <div class="text-sm text-gray-700"><strong>Class:</strong> ${student.studentClass}</div>
+                    <div class="text-sm text-gray-700"><strong>Address:</strong> ${student.address}</div>
+                    <div class="text-sm text-gray-700"><strong>Mobile:</strong> ${student.mobileNumber}</div>
+                    <div class="text-sm text-gray-700"><strong>Roll Number:</strong> ${student.rollNumber || "N/A"}</div>
+                </div>
+                <div>
+                    <img src="${student.photo}" style="height:100px;width:100px;margin-left:55px;margin-top:20px;border-radius:5px " >
+                </div>    
+            </div>     
+        `;
+
+        grid.appendChild(card);
+    });
+
+    container.appendChild(grid); // Add the grid to the container
+}
+
+
+        });
+    </script>
+</body>
+</html>
+
+   

@@ -8,6 +8,7 @@ const studentSchema = new mongoose.Schema({
     rollNumber: { type: String },
     address: { type: String, required: true },
     photo: { type: String, default: "default.jpg" }, // URL or file path
+    puvlicId:String,
     result: [
         {
             title: String,

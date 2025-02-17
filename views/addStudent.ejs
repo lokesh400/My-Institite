@@ -21,7 +21,7 @@
             </div>
             
             <!-- Registration Form -->
-            <form class="p-8 space-y-8" action="/add/new/student" method="POST">
+            <form class="p-8 space-y-8" action="/add/new/student" method="POST"  enctype="multipart/form-data" >
                 
                 <!-- Personal Information Section -->
                 <div class="space-y-6">
@@ -59,12 +59,19 @@
                                     <i class="fas fa-graduation-cap"></i>
                                 </span>
                                 <select name="studentClass" class="pl-10 w-full !rounded-button border-gray-300 focus:border-custom focus:ring-custom" required>
-                                    <option value="">Select Class</option>
-                                    <option value="10th">Class 10</option>
-                                    <option value="9th">Class 9</option>
-                                    <option value="8th">Class 8</option>
-                                    <option value="7th">Class 7</option>
-                                    <option value="6th">Class 6</option>
+                                        <option value="">Select Class</option>
+                                        <option value="1st">Class 1</option>
+                                        <option value="2nd">Class 2</option>
+                                        <option value="3rd">Class 3</option>
+                                        <option value="4th">Class 4</option>
+                                        <option value="5th">Class 5</option>
+                                        <option value="6th">Class 6</option>
+                                        <option value="7th">Class 7</option>
+                                        <option value="8th">Class 8</option>
+                                        <option value="9th">Class 9</option>
+                                        <option value="10th">Class 10</option>
+                                        <option value="11th">Class 11</option>
+                                        <option value="12th">Class 12</option>
                                 </select>
                             </div>
                         </div>
@@ -105,7 +112,7 @@
                             <div>
                                 <label class="cursor-pointer bg-custom text-white px-4 py-2 !rounded-button hover:bg-custom/90">
                                     <span>Upload Photo</span>
-                                    <input type="file" accept="image/*" class="hidden" onchange="previewImage(event)">
+                                    <input type="file" name="image" class="hidden" onchange="previewImage(event)">
                                 </label>
                             </div>
                         </div>

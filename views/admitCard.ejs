@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Content as PDF</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .content {
+            margin-bottom: 20px;
+        }
+        #downloadPDF {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #downloadPDF:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to Raj Unique Coaching Centre</h1>
+    <p>Here's some information about our services:</p>
+    
+    <!-- Content to be downloaded as PDF -->
+    <div id="content-to-pdf" class="content">
+        <h2>Course Information</h2>
+        <p>We offer Mathematics and Reasoning classes for various competitive exams such as NDA, CTET, HTET, Railway, and Banking. Join our academy to get the best preparation!</p>
+    </div>
+
+    <button id="downloadPDF">Download as PDF</button>
+
+    <script>
+        // When the button is clicked, generate the PDF
+        document.getElementById("downloadPDF").addEventListener("click", function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            // Get the content from the #content-to-pdf div
+            const content = document.getElementById("content-to-pdf").innerText;
+            // Add text to the PDF
+            doc.text(content, 10, 10); // Position at x:10, y:10 on the page
+            // Save the PDF with the filename "course-info.pdf"
+            doc.save("course-info.pdf");
+        });
+    </script>
+
+</body>
+</html>

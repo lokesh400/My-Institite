@@ -9,6 +9,8 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const localStrategy = require("passport-local");
 const methodOverride = require("method-override");
+const { jsPDF } = require('jspdf');
+
 
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
@@ -124,6 +126,13 @@ app.post("/add/new/enquiry", async (req, res) => {
   req.flash('success_msg',"enquiry generated successfully")
   res.redirect('/')
 });
+
+//Admit Card
+
+app.get("/admitcard", (req, res) => {
+  res.render("admitCard");
+});
+
 
 // Start server
 app.listen(PORT, () => {
