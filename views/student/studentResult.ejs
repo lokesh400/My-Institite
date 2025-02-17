@@ -6,18 +6,19 @@
     <title>Student Result Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 min-h-screen">
-    <main class="max-w-4xl mx-auto py-10 px-4 sm:px-6 lg:px-8">        
+    <main class="max-w-4xl mx-auto py-10 px-4 sm:px-6 lg:px-8" id="content-to-pdf" >        
         <div id="resultSection" class="bg-white shadow rounded-lg p-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div class="col-span-1">
-                    <img src="https://via.placeholder.com/200" alt="Student Photo" class="w-full h-48 object-cover rounded-lg">
-                </div>
-                <div class="col-span-2">
-                    <h3 class="text-xl font-semibold text-gray-900"><%= student.name %></h3>
+                    <h3 class="text-xl font-semibold text-gray-900"><b>Name: </b><%= student.name %></h3>
                     <dl class="mt-4 space-y-3">
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500"><b>Roll Number: </b><%= student.rollNumber %></dt>
+                        </div>
                         <div>
                             <dt class="text-sm font-medium text-gray-500">Father's Name</dt>
                             <dd class="text-sm text-gray-900"><%= student.fatherName %></dd>
@@ -31,6 +32,9 @@
                             <dd class="text-sm text-gray-900"><%= student.mobileNumber %></dd>
                         </div>                    
                     </dl>
+                </div>
+                <div class="col-span-2" style="margin-left: 80mm;"  >
+                    <img src="<%= student.photo %>" alt="Student Photo" class="w-48 h-48 object-cover rounded-lg">
                 </div>
             </div>
 
@@ -60,39 +64,76 @@
                 </div>
             </div>            
 
-            <div class="mt-8 border-t border-gray-200 pt-6">
-                <h4 class="text-lg font-semibold text-gray-900 mb-4">Performance Summary</h4>
-                <dl class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                    <div class="bg-gray-50 px-4 py-5 rounded-lg">                        
-                        <dt class="text-sm font-medium text-gray-500">Total Marks</dt>
-                        <dd class="mt-1 text-2xl font-semibold text-gray-900"><%= totalObtained %> / <%= totalMaxMarks %></dd>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-5 rounded-lg">
-                        <dt class="text-sm font-medium text-gray-500">Percentage</dt>
-                        <dd class="mt-1 text-2xl font-semibold text-gray-900"><%= ((totalObtained / totalMaxMarks) * 100).toFixed(2) %>%</dd>
-                    </div>                   
-                    <div class="bg-gray-50 px-4 py-5 rounded-lg">
-                        <dt class="text-sm font-medium text-gray-500">Grade</dt>
-                        <dd class="mt-1 text-2xl font-semibold text-custom">
-                            <% 
-                                let percentage = (totalObtained / totalMaxMarks) * 100;
-                                let grade = percentage >= 90 ? 'A+' : percentage >= 80 ? 'A' : percentage >= 70 ? 'B' : percentage >= 60 ? 'C' : 'D';
-                            %>
-                            <%= grade %>
-                        </dd>
-                    </div>
-                </dl>           
-            </div>
+        <!-- Inside the Performance Summary Section -->
+<div class="mt-8 border-t border-gray-200 pt-6">
+    <h4 class="text-lg font-semibold text-gray-900 mb-4">Performance Summary</h4>
+    <dl class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div class="bg-gray-50 px-4 py-5 rounded-lg">                        
+            <dt class="text-sm font-medium text-gray-500">Total Marks</dt>
+            <dd class="mt-1 text-2xl font-semibold text-gray-900"><%= totalObtained %> / <%= totalMaxMarks %></dd>
+        </div>
+        <div class="bg-gray-50 px-4 py-5 rounded-lg">
+            <dt class="text-sm font-medium text-gray-500">Percentage</dt>
+            <dd class="mt-1 text-2xl font-semibold text-gray-900">
+                <% 
+                    let percentage = (totalObtained / totalMaxMarks) * 100; 
+                %>
+                <%= percentage.toFixed(2) %>%
+            </dd>
+        </div>                   
+
+        <div class="bg-gray-50 px-4 py-5 rounded-lg">
+            <dt class="text-sm font-medium text-gray-500">Grade</dt>
+            <dd class="mt-1 text-2xl font-semibold text-custom">
+                <% 
+                    let grade;
+                    if (percentage >= 90) {
+                        grade = 'A+';
+                    } else if (percentage >= 80) {
+                        grade = 'A';
+                    } else if (percentage >= 70) {
+                        grade = 'B';
+                    } else if (percentage >= 60) {
+                        grade = 'C';
+                    } else {
+                        grade = 'D';
+                    }
+                %>
+                <%= grade %>
+            </dd>
+        </div>
+    </dl>           
+</div>
+
 
             <div class="mt-8 flex justify-end space-x-4">
-                <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom !rounded-button">                   
+                <button id="downloadPDF" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom !rounded-button">                   
                     <i class="fas fa-download mr-2"></i> Download PDF
-                </button>
-                <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium text-white bg-custom hover:bg-custom/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom !rounded-button">           
-                    <i class="fas fa-print mr-2"></i> Print Result
                 </button>
             </div>        
         </div>
     </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        document.getElementById("downloadPDF").addEventListener("click", function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF("p", "mm", "a4");
+            const content = document.getElementById("content-to-pdf");
+    
+            html2canvas(content, {
+                scale: 4, // Increase scale for better resolution (default is 1)
+                useCORS: true, // Ensures images are loaded properly
+                logging: false,
+            }).then(canvas => {
+                let imgData = canvas.toDataURL("image/png");
+                let imgWidth = 210; // A4 size width in mm
+                let imgHeight = (canvas.height * imgWidth) / canvas.width;
+                doc.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+                doc.save("student-result.pdf");
+            });
+        });
+    </script>
+    
 </body>
 </html>

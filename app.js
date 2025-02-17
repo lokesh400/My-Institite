@@ -129,7 +129,7 @@ app.post("/add/new/enquiry", async (req, res) => {
 
 //Admit Card
 
-app.get("/admitcard", (req, res) => {
+app.get("/admitcard", async (req, res) => {
   res.render("admitCard");
 });
 

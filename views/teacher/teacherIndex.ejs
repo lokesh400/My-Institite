@@ -17,9 +17,10 @@
             <%- include('../components/sidebar.ejs') %>
         </section>
 
-        <div style="position: fixed;" >
-            <%=currUser.name%>
-            <%=currUser.email%>
+        <div style="position: fixed; background-color: rgba(250, 235, 215, 0.507); padding: 20px; top: 10px; right: 10px; border-radius: 5px;" >
+            <b>Name:</b><%=currUser.name%> <br>
+            <b>Email:</b><%=currUser.email%> <br>
+            <b>Role:</b><%=currUser.role%>
         </div>
 
         <section style="width: calc(100% - 264px); margin-left: 264px;" >

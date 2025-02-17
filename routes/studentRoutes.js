@@ -218,6 +218,7 @@ router.get("/view-result", async (req, res) => {
     try {
         const student = await Student.findOne({ rollNumber });
         if (!student) {
+            console.log("No Student")
             return res.render('./errors/studentNotFound.ejs')
         }
 

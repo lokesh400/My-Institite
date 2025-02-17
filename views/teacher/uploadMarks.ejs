@@ -12,9 +12,6 @@
             -webkit-appearance: none;
             margin: 0;
         }
-        input[type="number"] {
-            -moz-appearance: textfield;
-        }
     </style>  
     <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
     <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
@@ -32,6 +29,13 @@
                 <p class="mt-2 text-sm text-gray-600">Enter marks for each student in the class</p>
             </div>        <div class="bg-white shadow rounded-lg overflow-hidden">
                 <form action="/upload/marks/<%= students.length %>" method="POST" class="divide-y divide-gray-200">
+
+                    <select name="subject">
+                        <% for (let i = 0; i < currUser.subjects.length; i++) { %>
+                            <option value="<%= currUser.subjects[i] %>"><%= currUser.subjects[i] %></option>
+                        <% } %>    
+                    </select>
+                    
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">                       
                              <thead class="bg-gray-50">

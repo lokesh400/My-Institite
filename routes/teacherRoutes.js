@@ -102,6 +102,7 @@ router.post("/submit-grade",ensureAuthenticated, async (req, res) => {
 
 router.post("/upload/marks/:count",ensureAuthenticated, async (req, res) => {
     const { count } = req.params;
+    const {subject} = req.body;
     const titleName = "Midterm Results";
     for (let i = 0; i < count; i++) {
         const studentId = req.body[`id${i}`];
@@ -114,7 +115,7 @@ router.post("/upload/marks/:count",ensureAuthenticated, async (req, res) => {
         const existingResult = student.result.find((res) => res.title === titleName);
         if (existingResult) {
             existingResult.subjects.push({
-                subjectName: "Physics",
+                subjectName: subject,
                 totalMarks: 100,
                 marks
             });
