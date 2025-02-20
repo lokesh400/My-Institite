@@ -1,56 +1,155 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download Content as PDF</title>
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admit Card</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="medium"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .content {
-            margin-bottom: 20px;
-        }
-        #downloadPDF {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        #downloadPDF:hover {
-            background-color: #45a049;
-        }
-    </style>
 </head>
-<body>
+<body class="bg-gray-50">
 
-    <h1>Welcome to Raj Unique Coaching Centre</h1>
-    <p>Here's some information about our services:</p>
     
-    <!-- Content to be downloaded as PDF -->
-    <div id="content-to-pdf" class="content">
-        <h2>Course Information</h2>
-        <p>We offer Mathematics and Reasoning classes for various competitive exams such as NDA, CTET, HTET, Railway, and Banking. Join our academy to get the best preparation!</p>
+
+    <div class="min-h-screen flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8"  >
+        <button id="downloadPDF">Download as PDF</button>
+        <div class="w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden" id="content-to-pdf" >
+            <div class="px-8 py-6 border-b border-gray-200">
+                <div class="flex items-center justify-center mb-6">
+                    <img src="https://ai-public.creatie.ai/gen_page/logo_placeholder.png" alt="School Logo" class="h-20"/>
+                </div>
+                <h1 class="text-3xl font-bold text-center text-gray-900">Cambridge International School</h1>
+                <h2 class="text-2xl font-semibold text-center text-custom mt-2">Admit Card</h2>
+                <p class="text-center text-gray-600 mt-1">Final Examination 2024</p>
+            </div>
+            <div class="px-8 py-6 grid grid-cols-3 gap-6">
+                <div class="col-span-2">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Roll Number</p>
+                            <p class="mt-1 font-semibold">2024CAM001</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Student Name</p>
+                            <p class="mt-1 font-semibold">John Smith</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Parent&#39;s Name</p>
+                            <p class="mt-1 font-semibold">Michael Smith</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Course/Class</p>
+                            <p class="mt-1 font-semibold">Grade 12 Science</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Academic Year</p>
+                            <p class="mt-1 font-semibold">2023-2024</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Examination Period</p>
+                            <p class="mt-1 font-semibold">March 1-15, 2024</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center items-start">
+                    <div class="w-32 h-40 border-2 border-gray-300 flex items-center justify-center">
+                        <img src="https://creatie.ai/ai/api/search-image?query=A professional headshot portrait of a young male student wearing a formal school uniform, looking directly at the camera with a neutral expression, against a plain light blue background&width=128&height=160&orientation=portrait&flag=a90a25b5-7a95-41bf-a84f-17aa73458b69&flag=1655bf60-68a1-4876-8994-3717849287f4" alt="Student Photo" class="w-full h-full object-cover"/>
+                    </div>
+                </div>
+            </div>
+            <div class="px-8 py-6 border-t border-gray-200">
+                <h3 class="text-lg font-semibold mb-4">Examination Schedule</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Room</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Mathematics</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">March 1, 2024</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">09:00 - 12:00</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Hall A-101</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Physics</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">March 3, 2024</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">09:00 - 12:00</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Hall A-102</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Chemistry</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">March 5, 2024</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">09:00 - 12:00</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Hall A-103</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="px-8 py-6 border-t border-gray-200">
+                <h3 class="text-lg font-semibold mb-4">Important Instructions</h3>
+                <ul class="list-disc pl-5 space-y-2 text-sm text-gray-600">
+                    <li>Candidates must bring this admit card to every examination.</li>
+                    <li>Arrive at the examination center at least 30 minutes before the scheduled time.</li>
+                    <li>Mobile phones and electronic devices are strictly prohibited in the examination hall.</li>
+                    <li>Follow all COVID-19 safety protocols as per institution guidelines.</li>
+                    <li>Bring your own stationery items as specified in the examination guidelines.</li>
+                </ul>
+            </div>
+            <div class="px-8 py-6 border-t border-gray-200">
+                <div class="grid grid-cols-3 gap-6">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 mb-2">Student&#39;s Signature</p>
+                        <div class="h-16 border-b-2 border-gray-300"></div>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 mb-2">Principal&#39;s Signature</p>
+                        <div class="h-16 border-b-2 border-gray-300"></div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <p class="text-sm font-medium text-gray-500 mb-2">Institution Seal</p>
+                        <div class="w-24 h-24 border-2 border-gray-300 rounded-full flex items-center justify-center">
+                            <span class="text-gray-400">Seal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="px-8 py-6 border-t border-gray-200 flex justify-between items-center">
+                <p class="text-sm text-gray-500">Document ID: ADM2024-001</p>
+                <div class="w-24 h-24">
+                    <i class="fas fa-qrcode text-6xl text-gray-400"></i>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <button id="downloadPDF">Download as PDF</button>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
-        // When the button is clicked, generate the PDF
         document.getElementById("downloadPDF").addEventListener("click", function() {
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            // Get the content from the #content-to-pdf div
-            const content = document.getElementById("content-to-pdf").innerText;
-            // Add text to the PDF
-            doc.text(content, 10, 10); // Position at x:10, y:10 on the page
-            // Save the PDF with the filename "course-info.pdf"
-            doc.save("course-info.pdf");
+            const doc = new jsPDF("p", "mm", "a4");
+            const content = document.getElementById("content-to-pdf");
+    
+            html2canvas(content, {
+                scale: 4, // Increase scale for better resolution (default is 1)
+                useCORS: true, // Ensures images are loaded properly
+                logging: false,
+            }).then(canvas => {
+                let imgData = canvas.toDataURL("image/png");
+                let imgWidth = 210; // A4 size width in mm
+                let imgHeight = (canvas.height * imgWidth) / canvas.width;
+                doc.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+                doc.save("admitcard.pdf");
+            });
         });
-    </script>
-
+    </script>    
 </body>
 </html>

@@ -29,7 +29,8 @@ const User = require('./models/User');
 const Enquiry = require('./models/Enquiry');
 const Information = require('./models/Information');
 const Result = require('./models/Result');
-const Team = require('./models/Team')
+const Team = require('./models/Team');
+const Class = require('./models/Class');
 
 // Connect to MongoDB
 mongoose.connect("mongodb://localhost:27017/myDatabase")
@@ -133,6 +134,38 @@ app.get("/admitcard", async (req, res) => {
   res.render("admitCard");
 });
 
+app.post("/add/new/class", async (req, res) => {
+  try {
+      const newClass = new Class(req.body);
+      await newClass.save();
+      res.status(201).json(newClass);
+  } catch (error) {
+      res.status(400).json({ message: error.message });
+  }
+});
+
+app.get("/all/classes", async (req, res) => {
+  try {
+      const classes = await Class.find();
+      res.render('teacher/allClasses.ejs',{classes});
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+});
+
+app.get("/add/new/class", async (req, res) => {
+  res.render('teacher/addClass.ejs')
+});
+
+app.get("/show/this/class/:id", async (req, res) => {
+  try {
+      const {id} = req.params;
+      const thisClass = await Class.findById(id);
+      res.render('teacher/thisClass.ejs',{thisClass});
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+});
 
 // Start server
 app.listen(PORT, () => {

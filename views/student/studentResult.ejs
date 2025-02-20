@@ -10,6 +10,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 min-h-screen">
+
+    <div class="mt-8 flex justify-end space-x-4">
+        <button id="downloadPDF" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom !rounded-button">                   
+            <i class="fas fa-download mr-2"></i> Download PDF
+        </button>
+    </div> 
+
     <main class="max-w-4xl mx-auto py-10 px-4 sm:px-6 lg:px-8" id="content-to-pdf" >        
         <div id="resultSection" class="bg-white shadow rounded-lg p-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -65,22 +72,22 @@
             </div>            
 
         <!-- Inside the Performance Summary Section -->
-<div class="mt-8 border-t border-gray-200 pt-6">
-    <h4 class="text-lg font-semibold text-gray-900 mb-4">Performance Summary</h4>
-    <dl class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div class="bg-gray-50 px-4 py-5 rounded-lg">                        
-            <dt class="text-sm font-medium text-gray-500">Total Marks</dt>
-            <dd class="mt-1 text-2xl font-semibold text-gray-900"><%= totalObtained %> / <%= totalMaxMarks %></dd>
-        </div>
-        <div class="bg-gray-50 px-4 py-5 rounded-lg">
-            <dt class="text-sm font-medium text-gray-500">Percentage</dt>
-            <dd class="mt-1 text-2xl font-semibold text-gray-900">
-                <% 
-                    let percentage = (totalObtained / totalMaxMarks) * 100; 
-                %>
-                <%= percentage.toFixed(2) %>%
-            </dd>
-        </div>                   
+            <div class="mt-8 border-t border-gray-200 pt-6">
+                <h4 class="text-lg font-semibold text-gray-900 mb-4">Performance Summary</h4>
+                <dl class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <div class="bg-gray-50 px-4 py-5 rounded-lg">                        
+                        <dt class="text-sm font-medium text-gray-500">Total Marks</dt>
+                        <dd class="mt-1 text-2xl font-semibold text-gray-900"><%= totalObtained %> / <%= totalMaxMarks %></dd>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-5 rounded-lg">
+                        <dt class="text-sm font-medium text-gray-500">Percentage</dt>
+                        <dd class="mt-1 text-2xl font-semibold text-gray-900">
+                        <% 
+                            let percentage = (totalObtained / totalMaxMarks) * 100; 
+                        %>
+                            <%= percentage.toFixed(2) %>%
+                        </dd>
+             </div>                   
 
         <div class="bg-gray-50 px-4 py-5 rounded-lg">
             <dt class="text-sm font-medium text-gray-500">Grade</dt>
@@ -103,14 +110,7 @@
             </dd>
         </div>
     </dl>           
-</div>
-
-
-            <div class="mt-8 flex justify-end space-x-4">
-                <button id="downloadPDF" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom !rounded-button">                   
-                    <i class="fas fa-download mr-2"></i> Download PDF
-                </button>
-            </div>        
+            </div>       
         </div>
     </main>
 
@@ -130,7 +130,7 @@
                 let imgWidth = 210; // A4 size width in mm
                 let imgHeight = (canvas.height * imgWidth) / canvas.width;
                 doc.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-                doc.save("student-result.pdf");
+                doc.save("<%= result.title %> result.pdf");
             });
         });
     </script>

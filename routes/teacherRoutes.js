@@ -19,10 +19,18 @@ function ensureAuthenticated(req, res, next) {
     res.render("./error/accessdenied.ejs");
   }
 
+
+
 // Manage Teachers
 router.get("/manage/teachers",ensureAuthenticated, async  (req, res) => {
     const teachers = await Teacher.find();
     res.render("manageTeachers.ejs",{teachers});
+});
+
+// Manage Teachers
+router.get("/teachers",ensureAuthenticated, async  (req, res) => {
+    const teachers = await Teacher.find();
+    res.render("teacher/index.ejs");
 });
 
 // delete teacher
