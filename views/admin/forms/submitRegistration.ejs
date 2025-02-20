@@ -29,6 +29,9 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <% form.fields.forEach(field => { %>
                     <div>
+
+                        <input type="text" name="title" value="<% form.title %>" readonly >
+
                         <label class="block text-sm font-medium text-gray-700"><%= field.label %></label>
                         
                         <% if (field.type === "text" || field.type === "email" || field.type === "number") { %>

@@ -60,33 +60,39 @@ function isAdmin(req, res, next) {
   res.render("./error/accessdenied.ejs");
 }
 
-// New form
-router.get("/create/new/exam/registration",ensureAuthenticated,isAdmin, async  (req, res) => {
-    res.render("./admin/forms/examRegistration.ejs");
-});
-
 // All Forms
 router.get("/get/all/exam/registration", ensureAuthenticated,isAdmin,async  (req, res) => {
     const forms = await ExamRegistration.find();
-    res.render("./admin/forms/viewForms.ejs",{forms});
+    res.render("./admin/forms/viewExamForms.ejs",{forms});
 });
+
+// New form
+router.get("/create/new/exam/registration",ensureAuthenticated,isAdmin, async  (req, res) => {
+  res.render("./admin/forms/examRegistration.ejs");
+});
+
 
 // Save New Form
 router.post("/exam/new/registration",ensureAuthenticated,isAdmin, async (req, res) => {
-    const { title, labels, types, required, options } = req.body;
+    try{
+      const { title, labels, types, required, options } = req.body;
     const fields = labels.map((label, index) => ({
         label,
         type: types[index],
         required: required.includes(String(index)),
         options: options[index] ? options[index].split(",") : [],
     }));
-    const newForm = new Form({ title, fields });
+    const newForm = new ExamRegistration({ title, fields });
     await newForm.save();
-    res.redirect("/get/allforms");
+    res.redirect("/get/all/exam/registration");
+    }
+    catch(error){
+      res.send(error)
+    }
 });
 
 // Show a Specific Form to Submit
-router.get("/forms/:id",ensureAuthenticated,isAdmin, async (req, res) => {
+router.get("/exam/forms/:id",ensureAuthenticated,isAdmin, async (req, res) => {
     const form = await ExamRegistration.findById(req.params.id);
     res.render("./admin/forms/submitRegistration.ejs", { form });
 });
@@ -105,7 +111,6 @@ router.get("/forms/:formId/responses",ensureAuthenticated,isAdmin, async (req, r
     try {
         const formId = req.params.formId;
         const responses = await ExamResponse.find({ formId });
-
         res.render("./admin/forms/response.ejs", { responses });
     } catch (error) {
         res.status(500).send("Error fetching responses");
