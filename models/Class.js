@@ -1,25 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const Teacher = require('./Teacher')
 
-const classSchema = new mongoose.Schema({
-    title: {
-        type: String,
-    },
-    coordinator:{
-        type:String,
-    },
-    year: {
-        type: String,
-    },
-    teachers:{
-        type:Array,
-    },
-    students:{
-        type:Array,
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+const ClassSchema = new mongoose.Schema({
+    title: String,
+    teachers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Teacher" }], // Multiple teachers
+    coordinator: { type: mongoose.Schema.Types.ObjectId, ref: "Teacher" } // One coordinator
 });
 
-module.exports = mongoose.model("Class", classSchema);
+module.exports = mongoose.model("Class", ClassSchema);

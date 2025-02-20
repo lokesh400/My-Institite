@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const formSchema = new mongoose.Schema({
+const examRegistrationSchema = new mongoose.Schema({
     title: { type: String, required: true },
     created: { type: Date, default: Date.now },
     fields: [
@@ -13,6 +13,6 @@ const formSchema = new mongoose.Schema({
     ],
 });
 
-const Form = mongoose.model("Form", formSchema);
+const ExamRegistration = mongoose.model("ExamRegistration", examRegistrationSchema);
 
-module.exports = Form;
+module.exports = ExamRegistration;

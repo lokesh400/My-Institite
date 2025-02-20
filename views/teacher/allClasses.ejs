@@ -4,26 +4,161 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Classes</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        /* Main Content */
+        main {
+            margin-left: 254px;
+            width: calc(100% - 254px);
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: black;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .navbar .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li {
+            margin: 0 15px;
+        }
+
+        .navbar ul li a {
+            color: white;
+            background-color: #007bff;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        
+        /* Content Section */
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* Class Cards Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            justify-content: center;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        /* Class Card */
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border-left: 5px solid #007bff;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Class Title */
+        .card h3 {
+            color: #007bff;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        /* Button */
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>All Classes</h1>
-    
-    <%for(let i=0; i<classes.length; i++){%>
 
-        <div id="card" >
-            <h3>
-            <%= classes[i].title %>
-            </h3>  
-             
-            <a href="/show/this/class/<%= classes[i]._id %>">
-                <button>
-                    Show Info
-                </button>
-            </a>
-            
+    <!-- Sidebar -->
+    <%- include('../components/sidebar.ejs') %>
+
+    <!-- Main Content -->
+    <main>
+        <div class="navbar">
+            <div class="logo">All Classes</div>
+            <ul>
+                <li><a href="/add/new/class">Add Class</a></li>
+                <li><a href="/manage/teachers">Manage Teachers</a></li>
+            </ul>
         </div>
 
-    <%}%>   
+        <div class="container">
+            <div class="grid-container">
+                <% for(let i = 0; i < classes.length; i++) { %>
+                    <div class="card">
+                        <h3><%= classes[i].title %></h3>  
+                        <a href="/show/this/class/<%= classes[i]._id %>" class="btn">Show Info</a>
+                    </div>
+                <% } %>  
+            </div>
+        </div>
+    </main>
 
 </body>
 </html>

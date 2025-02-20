@@ -4,15 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #classList {
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>Class Management</h1>
-        <form id="classForm" action="/add/new/class" method="POST" >
-            <h1>Title</h1>
-            <input type="text" id="title" name="title" placeholder="Class Title" required>
-            <h1>Year</h1>
-            <input type="text" name="year" >
+        <form id="classForm" action="/add/new/class" method="POST">
+            <label for="title"><strong>Title</strong></label>
+            <input type="text" id="title" name="title" placeholder="Enter Class Title" required>
+            
+            <label for="year"><strong>Year</strong></label>
+            <input type="text" id="year" name="year" placeholder="Enter Year" required>
+            
             <button type="submit">Add Class</button>
         </form>
         <div id="classList"></div>

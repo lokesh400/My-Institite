@@ -56,7 +56,7 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/user/login');
+  res.redirect('/login');
 }
 
 function isAdmin(req, res, next) {
@@ -139,26 +139,26 @@ router.get("/add/new/teacher",ensureAuthenticated,isAdmin, async  (req, res) => 
     res.render("./admin/addTeacher.ejs");
 });
 
-router.post("/teachers/add/new",ensureAuthenticated,isAdmin, async (req, res) => {
-    try {
-        const { name, subject, fatherName, mobileNumber, address, photo } = req.body;
+// router.post("/teachers/add",ensureAuthenticated,isAdmin, async (req, res) => {
+//     try {
+//         const { name, subject, fatherName, mobileNumber, address, photo } = req.body;
 
-        const newTeacher = new Teacher({
-            name,
-            subject,
-            fatherName,
-            mobileNumber,
-            address,
-            photo: photo || "default.jpg", // Use default if no photo provided
-        });
+//         const newTeacher = new Teacher({
+//             name,
+//             subject,
+//             fatherName,
+//             mobileNumber,
+//             address,
+//             photo: photo || "default.jpg", // Use default if no photo provided
+//         });
 
-        await newTeacher.save();
-        res.status(201).json({ success: true, message: "Teacher added successfully!" });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: "Server error" });
-    }
-});
+//         await newTeacher.save();
+//         res.status(201).json({ success: true, message: "Teacher added successfully!" });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ success: false, message: "Server error" });
+//     }
+// });
 
 //get all enquiries
 router.get("/get/all/enquiry",ensureAuthenticated,isAdmin, async (req, res) => {

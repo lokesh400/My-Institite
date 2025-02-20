@@ -31,6 +31,7 @@ const Information = require('./models/Information');
 const Result = require('./models/Result');
 const Team = require('./models/Team');
 const Class = require('./models/Class');
+const Teacher = require('./models/Teacher');
 
 // Connect to MongoDB
 mongoose.connect("mongodb://localhost:27017/myDatabase")
@@ -91,12 +92,14 @@ const teacherRoutes = require("./routes/teacherRoutes");
 const adminRoutes = require("./routes/admin");
 const userrouter = require("./routes/user.js");
 const courserouter = require("./routes/courses.js");
+const examrouter = require("./routes/exam.js");
 
 app.use("/", studentRoutes);
 app.use("/", teacherRoutes);
 app.use("/", adminRoutes);
-app.use("/user",userrouter);
+app.use("/",userrouter);
 app.use("/",courserouter);
+app.use("/",examrouter);
 
 // Home route
 app.get("/", async (req, res) => {
@@ -161,11 +164,61 @@ app.get("/show/this/class/:id", async (req, res) => {
   try {
       const {id} = req.params;
       const thisClass = await Class.findById(id);
-      res.render('teacher/thisClass.ejs',{thisClass});
+      const grade = thisClass.title;
+      const students = await Student.find({studentClass:grade});
+      const teachers = await Teacher.find();
+      res.render('teacher/thisClass.ejs',{thisClass,students,teachers});
   } catch (error) {
       res.status(500).json({ message: error.message });
   }
 });
+
+app.post("/assign-teachers", async (req, res) => {
+    try {
+        const { classId, teacherIds, coordinatorId } = req.body;
+
+        // Convert teacherIds to an array and ensure they are valid ObjectIds
+        const teacherArray = Array.isArray(teacherIds) 
+            ? teacherIds.map(id => new mongoose.Types.ObjectId(id)) 
+            : [new mongoose.Types.ObjectId(teacherIds)];
+
+        await Class.findByIdAndUpdate(classId, { 
+            teachers: teacherArray, 
+            coordinator: coordinatorId ? new mongoose.Types.ObjectId(coordinatorId) : null
+        });
+
+        res.redirect(`/show/this/class/${classId}`);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+app.post("/add-more-teachers", async (req, res) => {
+    try {
+        const { classId, newTeacherIds } = req.body;
+
+        // Ensure newTeacherIds is an array and convert to ObjectIds
+        const newTeacherArray = Array.isArray(newTeacherIds) 
+            ? newTeacherIds.map(id => new mongoose.Types.ObjectId(id)) 
+            : [new mongoose.Types.ObjectId(newTeacherIds)];
+
+        // Get current class
+        const thisClass = await Class.findById(classId);
+        
+        // Merge old and new teachers, removing duplicates
+        const updatedTeachers = [...new Set([...thisClass.teachers.map(id => id.toString()), ...newTeacherArray.map(id => id.toString())])];
+
+        await Class.findByIdAndUpdate(classId, { teachers: updatedTeachers.map(id => new mongoose.Types.ObjectId(id)) });
+
+        res.redirect(`/show/this/class/${classId}`);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
 
 // Start server
 app.listen(PORT, () => {

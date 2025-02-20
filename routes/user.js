@@ -4,13 +4,20 @@ const User = require('../models/User');
 const passport = require("passport");
 const nodemailer = require('nodemailer');
 const passportLocalMongoose = require('passport-local-mongoose');
+const Teacher = require('../models/Teacher')
 
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
       return next();
     }
-    res.redirect('/user/login');
+    res.redirect('/login');
   }
+  function isAdmin(req, res, next) {
+    if (req.user.role==='admin') {
+      return next();
+    }
+    res.render('./errors/isAdmin.ejs')
+  }  
 
 // Signup route
 router.get('/signup', (req, res) => {
@@ -22,14 +29,13 @@ router.post('/signup', async (req, res) => {
     const {name,email, password ,confirmpassword,otp,contactNumber} = req.body;
     const role = "student";
     const username = email;
-    let user = await Otp.findOne({ email });
+    // let user = await Otp.findOne({ email });
     if(password==confirmpassword&&otp==user.otp){
         const newUser = new User({name,role, email, username,contactNumber });
     try {
         // Attempt to register the new user
         const registeredUser = await User.register(newUser, password);
         //sendimg greeting mail
-
         const transporter = nodemailer.createTransport({
             service:'gmail',
             host:'smtp.gmail.com',
@@ -59,12 +65,9 @@ router.post('/signup', async (req, res) => {
             })
         }
         // Redirect to login page after successful registration
-        res.redirect('/user/login');
+        res.redirect('/login');
     } catch (error) {
-        console.error(error);
-        // Render signup page with an error message
-        req.flash('error_msg', error.message);
-        res.render("./users/signup.ejs");
+       res.send(error)
     }
     }
     else{
@@ -72,13 +75,62 @@ router.post('/signup', async (req, res) => {
     } 
 });
 
+router.post("/teachers/add", async (req, res) => {
+    try {
+      const { name, subject, fatherName, mobileNumber, address, photo, email } = req.body;
+      const role = "teacher";
+      const username = email;
+      const password = `${name}@123`;
+      const newUser = new User({ name, role, email, username });
+      const registeredUser = await User.register(newUser, password);
+      const newTeacher = new Teacher({
+        name,
+        subject,
+        fatherName,
+        mobileNumber,
+        address,
+        photo: photo || "default.jpg", // Use default if no photo provided
+      });
+      await newTeacher.save(); // Ensure teacher record is saved
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        secure: false,
+        port: 587,
+        auth: {
+          user: "lokeshbadgujjar401@gmail.com",
+          pass: process.env.mailpass
+        }
+      });
+      const mailOptions = {
+        from: "lokeshbadgujjar401@gmail.com",
+        to: email,
+        subject: 'Welcome to TheTestPulseFamily',
+        text: `Dear ${name}, welcome to TheTestPulse Family.`
+      };
+      try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log(`Email sent: ${info.response}`);
+      } catch (error) {
+        console.error(`Error sending email: ${error.message}`);
+      }
+      req.flash("success_msg", "Student added successfully!");
+      res.redirect('/manage/teachers');
+    } catch (error) {
+      console.error(error);
+      req.flash('error_msg', error.message);
+      res.render("./users/signup.ejs");
+    }
+  });
+  
+
 // Login route
 router.get("/login", (req, res) => {
     req.flash('error_msg', 'Welcome back');
     res.render("./users/login.ejs");
 });
 
-router.post("/login", async (req, res, next) => {
+router.post("/user/login", async (req, res, next) => {
     // Passport Authentication manually
     passport.authenticate("local", async (err, user, info) => {
         if (err) {
@@ -104,7 +156,6 @@ router.post("/login", async (req, res, next) => {
             } else {
                 res.redirect("/student"); // Redirect to student page
             }
-
             // Send login email notification
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
