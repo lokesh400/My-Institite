@@ -34,7 +34,7 @@ const Class = require('./models/Class');
 const Teacher = require('./models/Teacher');
 
 // Connect to MongoDB
-mongoose.connect("mongodb://localhost:27017/myDatabase")
+mongoose.connect(process.env.mongo_url)
     .then(() => console.log("MongoDB Connected"))
     .catch(err => console.log(err));
 
