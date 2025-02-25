@@ -19,7 +19,6 @@ const fs = require('fs');
 const { error } = require("console");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 const sessionOptions = require("./config/sessionConfig");
 // const upload = require("./config/cloudinaryUpload");
@@ -124,6 +123,7 @@ app.get("/about", (req, res) => {
 });
 
 app.post("/add/new/enquiry", async (req, res) => {
+ try{
   const {name,message,number} = req.body;
   const newEnquiry = new Enquiry({
     name,number,message
@@ -131,6 +131,9 @@ app.post("/add/new/enquiry", async (req, res) => {
   await newEnquiry.save();
   req.flash('success_msg',"enquiry generated successfully")
   res.redirect('/')
+ }catch(error){
+  console.log(error)
+ }
 });
 
 //Admit Card
@@ -223,7 +226,7 @@ app.post("/add-more-teachers", async (req, res) => {
 
 
 // Start server
-app.listen(PORT, () => {
+app.listen(777, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });
 
