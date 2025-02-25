@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Select an Exam to Generate Admit Cards</h2>
+<ul>
+    <% exams.forEach(exam => { %>
+        <li>
+            <a href="/admin/generate-admit-card/<%= exam._id %>"><%= exam.title %></a>
+        </li>
+    <% }) %>
+</ul>
+
+</body>
+</html>

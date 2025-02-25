@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 const Form = require("../models/Form");
 const Response = require("../models/Response");
 const Teacher = require("../models/Teacher");
@@ -7,7 +8,8 @@ const Enquiry = require("../models/Enquiry");
 const Information = require("../models/Information");
 const Result = require("../models/Result");
 const Team = require("../models/Team");
-const Student = require('../models/Student')
+const Student = require('../models/Student');
+const AdmitCard = require('../models/AdmitCard')
 
 const multer = require('multer');
 const path = require('path');
@@ -79,7 +81,7 @@ router.get("/get/allforms", ensureAuthenticated,isAdmin,async  (req, res) => {
 
 // Save New Form
 router.post("/create-form",ensureAuthenticated,isAdmin, async (req, res) => {
-    const { title, labels, types, required, options } = req.body;
+    const { title, labels, types, required, options,formType } = req.body;
     const fields = labels.map((label, index) => ({
         label,
         type: types[index],
@@ -87,7 +89,7 @@ router.post("/create-form",ensureAuthenticated,isAdmin, async (req, res) => {
         options: options[index] ? options[index].split(",") : [],
     }));
 
-    const newForm = new Form({ title, fields });
+    const newForm = new Form({ title,formType,fields });
     await newForm.save();
     res.redirect("/get/allforms");
 });
@@ -112,7 +114,6 @@ router.get("/forms/:formId/responses",ensureAuthenticated,isAdmin, async (req, r
     try {
         const formId = req.params.formId;
         const responses = await Response.find({ formId });
-
         res.render("./admin/forms/response.ejs", { responses });
     } catch (error) {
         res.status(500).send("Error fetching responses");
@@ -574,6 +575,115 @@ router.post("/print/id", upload.none(), async (req, res) => {
       console.error("Error fetching students:", error);
       res.status(500).send('Server Error');
   }
+});
+
+//generate admit card
+router.get("/generate", async (req, res) => {
+  try {
+      const exams = await Form.find({ formType: "Exam" });
+      console.log(exams);
+      res.render("admin/exams-list", { exams }); // Render a page showing all exams
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Server Error" });
+  }
+});
+
+router.get("/admin/generate-admit-card/:formId", async (req, res) => {
+  try {
+      const formId = req.params.formId;
+
+      // Fetch the exam details
+      const exam = await Form.findById(formId);
+      if (!exam) {
+          return res.status(404).send("Exam not found.");
+      }
+
+      res.render("admin/generate-admit-card", { exam });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send("Server Error");
+  }
+});
+
+
+router.post("/exam/:formId/generate-admit-cards", async (req, res) => {
+  try {
+      const formId = new mongoose.Types.ObjectId(req.params.formId);
+      const { examDate, examCenter } = req.body; // User inputs date & center
+
+      // Find all registered students for this exam
+      const candidates = await Response.find({ formId });
+
+      if (candidates.length === 0) {
+          return res.status(404).json({ message: "No candidates found for this exam." });
+      }
+
+      const admitCards = candidates.map((candidate, index) => ({
+          formId: formId,
+          userId: candidate._id,
+          rollNumber: `EXAM-${formId.toString().slice(-5)}-${index + 1}`, // Unique Roll No
+          examDate,
+          examCenter,
+          status: "Issued",
+          issuedAt: new Date()
+      }));
+
+      await AdmitCard.insertMany(admitCards);
+
+      res.json({ message: "Admit cards issued successfully", admitCards });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Server Error" });
+  }
+});
+
+router.post("/download-admit-card", async (req, res) => {
+  try {
+      const { title, mobileNumber } = req.body;
+
+      // Find the exam by title
+      const form = await Form.findOne({ title, formType: "Exam" });
+      if (!form) {
+          return res.status(404).send("Exam not found.");
+      }
+
+      // Find the student's registration using mobile number
+      const studentResponse = await Response.findOne({
+          formId: form._id,
+          "data.Mobile": mobileNumber,
+      });
+      if (!studentResponse) {
+          return res.status(404).send("No registration found with this mobile number.");
+      }
+
+      // Find the admit card for the student
+      const admitCard = await AdmitCard.findOne({ formId: form._id, userId: studentResponse._id });
+
+      if (!admitCard) {
+          return res.status(404).send("Admit Card not found.");
+      }
+
+      // Render the admit card page with dynamic data
+      res.render("admitCard.ejs", { admitCard, student: studentResponse.data, examTitle: title });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send("Server Error");
+  }
+});
+
+router.get("/get-exam-titles", async (req, res) => {
+  try {
+      const exams = await Form.find({ formType: "Exam" }).select("title");
+      res.json(exams);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Server Error" });
+  }
+});
+
+router.get("/download", async (req, res) => {
+  res.render('student/downloadAdmitCard.ejs')
 });
 
 

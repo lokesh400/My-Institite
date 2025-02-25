@@ -28,6 +28,13 @@
                         </div>
                     </div>
                     <div class="flex items-center">  
+                        <a href="/add/new/exam">
+                            <button type="button" class="!rounded-button bg-custom px-4 py-2 text-white text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom">                        
+                                <i class="fas fa-plus mr-2"></i>Add New Exam
+                            </button>
+                        </a>                   
+                    </div>
+                    <div class="flex items-center">  
                         <a href="/create/new/exam/registration">
                             <button type="button" class="!rounded-button bg-custom px-4 py-2 text-white text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom">                        
                                 <i class="fas fa-plus mr-2"></i>Create New Form
@@ -85,8 +92,8 @@
                                     <button class="!rounded-button flex-1 bg-custom text-white px-4 py-2 text-sm font-medium hover:bg-indigo-700">                           
                                         <i class="fas fa-eye mr-2"></i>View Form
                                     </button>
-                                </a> 
-                                <a href="/forms/<%= form._id %>/responses">
+                                </a>
+                                <a href="/exam/<%= form._id %>/responses">
                                     <button class="!rounded-button flex-1 bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium hover:bg-gray-200">                           
                                         <i class="fas fa-chart-bar mr-2"></i>Responses
                                     </button>

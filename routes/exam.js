@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const ExamRegistration = require("../models/ExamRegistration");
 const ExamResponse = require("../models/ExamResponse");
+const Exam = require("../models/Exam");
 
 const multer = require('multer');
 const path = require('path');
@@ -60,6 +61,19 @@ function isAdmin(req, res, next) {
   res.render("./error/accessdenied.ejs");
 }
 
+// Add New Exam
+router.get("/add/new/exam", ensureAuthenticated,isAdmin,async  (req, res) => {
+  res.render("./admin/newExam.ejs");
+});
+
+router.post("/create/new/exam", ensureAuthenticated,isAdmin,async  (req, res) => {
+  const forms = await ExamRegistration.find();
+  const {title,date,address} = req.body;
+  const newExam = new Exam({title,date,address});
+  await newExam.save();
+  res.render("./admin/forms/viewExamForms.ejs",{forms});
+});
+
 // All Forms
 router.get("/get/all/exam/registration", ensureAuthenticated,isAdmin,async  (req, res) => {
     const forms = await ExamRegistration.find();
@@ -68,9 +82,9 @@ router.get("/get/all/exam/registration", ensureAuthenticated,isAdmin,async  (req
 
 // New form
 router.get("/create/new/exam/registration",ensureAuthenticated,isAdmin, async  (req, res) => {
-  res.render("./admin/forms/examRegistration.ejs");
+  const exams = await Exam.find()
+  res.render("./admin/forms/examRegistration.ejs",{exams});
 });
-
 
 // Save New Form
 router.post("/exam/new/registration",ensureAuthenticated,isAdmin, async (req, res) => {
@@ -107,14 +121,36 @@ router.post("/new/exam/form/:id",ensureAuthenticated,isAdmin, async (req, res) =
 });
 
 //Particular Form Data
-router.get("/forms/:formId/responses",ensureAuthenticated,isAdmin, async (req, res) => {
-    try {
-        const formId = req.params.formId;
-        const responses = await ExamResponse.find({ formId });
-        res.render("./admin/forms/response.ejs", { responses });
-    } catch (error) {
-        res.status(500).send("Error fetching responses");
-    }
+router.get("/exam/:formId/responses",ensureAuthenticated,isAdmin, async (req, res) => {
+  try {
+    const formId = new mongoose.Types.ObjectId(req.params.formId);
+
+    const responses = await ExamResponse.aggregate([
+        {
+            $match: { formId: formId }
+        },
+        {
+            $lookup: {
+                from: "examregistrations", // Collection name in MongoDB (lowercase, plural)
+                localField: "formId",
+                foreignField: "_id",
+                as: "examDetails"
+            }
+        }
+    ]);
+
+    res.json(responses);
+} catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+}
+    // try {
+    //     const formId = new mongoose.Types.ObjectId(req.params.formId); // Convert to ObjectId
+    //     const responses = await ExamResponse.find({ formId });
+    //     res.render("./admin/forms/response.ejs", { responses });
+    // } catch (error) {
+    //     res.send(error);
+    // }
 });
 
 // Delete Form & Its Responses

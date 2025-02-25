@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Download Your Admit Card</h2>
+
+<form action="/download-admit-card" method="POST">
+    <label for="examTitle">Select Exam Title:</label>
+    <select name="title" id="examTitle" required>
+        <option value="">Loading...</option>
+    </select>
+
+    <label>Mobile Number:</label>
+    <input type="text" name="mobileNumber" required>
+
+    <button type="submit">Download Admit Card</button>
+</form>
+
+<script>
+    async function fetchExamTitles() {
+        try {
+            const response = await fetch("/get-exam-titles");
+            const exams = await response.json();
+            const dropdown = document.getElementById("examTitle");
+            dropdown.innerHTML = `<option value="">Select Exam</option>`;
+            exams.forEach(exam => {
+                dropdown.innerHTML += `<option value="${exam.title}">${exam.title}</option>`;
+            });
+        } catch (error) {
+            console.error("Error fetching exam titles:", error);
+        }
+    }
+
+    fetchExamTitles(); // Call function when page loads
+</script>
+
+</body>
+</html>
