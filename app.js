@@ -227,7 +227,7 @@ app.post("/add-more-teachers", async (req, res) => {
 
 // Start server
 app.listen(777, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+    console.log("Server running at http://localhost:777");
 });
 
 
