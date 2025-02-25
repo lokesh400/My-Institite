@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Quizzes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+        }
+
+        .quiz-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn {
+            background: #3b82f6;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="text-gray-900">
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold text-center mb-6">📚 All Quizzes</h1>
+        
+        <div id="quizList" class="space-y-6">
+
+            <% quizzes.forEach(quiz => { %>
+                <div class="quiz-card shadow-lg" data-aos="fade-up">
+                    <h2 class="text-xl font-bold mb-2"><%= quiz.question %></h2>
+                    <p class="text-gray-600">Category: <%= quiz.category %></p>
+                    <p class="text-sm text-gray-500">Date: <%= quiz.date %></p>
+                    <a href="/attempt/new/streak/quiz/<%= quiz._id %>" class="btn inline-block mt-3">🎯 Take Quiz</a>
+                </div>
+            <% }) %>
+
+        </div>
+    </div>
+
+    <script>
+        gsap.from(".quiz-card", { opacity: 0, y: 50, duration: 0.5, stagger: 0.2 });
+    </script>
+</body>
+</html>

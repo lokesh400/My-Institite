@@ -92,6 +92,7 @@ const adminRoutes = require("./routes/admin");
 const userrouter = require("./routes/user.js");
 const courserouter = require("./routes/courses.js");
 const examrouter = require("./routes/exam.js");
+const quizrouter = require("./routes/quiz.js");
 
 app.use("/", studentRoutes);
 app.use("/", teacherRoutes);
@@ -99,6 +100,7 @@ app.use("/", adminRoutes);
 app.use("/",userrouter);
 app.use("/",courserouter);
 app.use("/",examrouter);
+app.use("/",quizrouter);
 
 // Home route
 app.get("/", async (req, res) => {

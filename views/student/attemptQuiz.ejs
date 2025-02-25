@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        body {
+            background: url('https://source.unsplash.com/1600x900/?education,learning') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            color: black;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+        .question {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 12px;
+            border-radius: 10px;
+            background: none;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            border: 1px solid rgba(0, 0, 0, 0.3);
+        }
+        .option:hover {
+            background: rgba(0, 0, 0, 0.1);
+            transform: scale(1.05);
+        }
+        .selected {
+            background: rgba(19, 124, 237, 0.326);
+            border: 2px solid black;
+            transform: scale(1.05);
+        }
+        button {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            padding:20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 75, 43, 0.5);
+        }
+        input[type="radio"] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <form action="/submit/new/streak/quiz/<%= quiz._id %>" method="POST" class="glass">
+        <h2 class="text-2xl font-bold mb-4">🧠 Quiz Time!</h2>
+        <p class="question"><%= quiz.question %></p>
+        <div>
+            <input type="radio" id="opt1" name="selected"  value="1">
+            <label for="opt1" class="option" onclick="selectOption(this)"><%= quiz.option1 %></label>
+            
+            <input type="radio" id="opt2" name="selected" value="2"">
+            <label for="opt2" class="option" onclick="selectOption(this)"><%= quiz.option2 %></label>
+
+            <input type="radio" id="opt3" name="selected" value="3">
+            <label for="opt3" class="option" onclick="selectOption(this)"><%= quiz.option3 %></label>
+
+            <input type="radio" id="opt4" name="selected" value="4">
+            <label for="opt4" class="option" onclick="selectOption(this)"><%= quiz.option4 %></label>
+        </div>
+        <button type="submit">✅ Submit Answer</button>
+    </form>
+
+    <script>
+        function selectOption(selected) {
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            selected.classList.add('selected');
+        }
+    </script>
+
+</body>
+</html>
