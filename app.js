@@ -103,14 +103,16 @@ app.use("/",examrouter);
 
 // Home route
 app.get("/", async (req, res) => {
-    // if(req.user){
-    //     res.redirect('/admin')
-    // }
-    const information = await Information.findOne();
-    const result = await Result.find();
-    const team = await Team.find();
-    const calendarUpdates = Object.fromEntries(information.updates.calendar);
-    res.render("index",{information,calendarUpdates,result,team});
+    try{
+
+      const information = await Information.findOne();
+      const result = await Result.find();
+      const team = await Team.find();
+      const calendarUpdates = Object.fromEntries(information.updates.calendar);
+      res.render("index",{information,calendarUpdates,result,team});
+    }catch(error){
+      console.log(error)
+    }
 });
 
 app.get("/admin", async (req, res) => {
