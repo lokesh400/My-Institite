@@ -15,6 +15,20 @@ router.get("/get/all/streak/quiz", async (req, res) => {
     }
   });
 
+  //todays quiz
+  
+  router.get("/get/today/streak/quiz", async (req, res) => {
+    try {
+        const today = new Date().toISOString().split("T")[0]
+        const quiz = await Quiz.findOne({date:today});
+        if(!quiz){
+            res.send("no quiz for today")
+        }
+        res.redirect(`/attempt/new/streak/quiz/${quiz._id}`)
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
 
 // Create a Quiz
 router.get("/create/new/quiz", async (req, res) => {
@@ -43,7 +57,12 @@ router.get("/attempt/new/streak/quiz/:id", async (req, res) => {
     try {
         const {id}=req.params;
         const quiz = await Quiz.findById(id)
-     res.render('student/attemptQuiz.ejs',{quiz});
+            const attempt = await QuizAttempt.findOne({ userId: req.user.id, quizId: id });
+            if (attempt) {
+                res.render('errors/alreadyAttempted.ejs',{quiz});
+            } else {
+                res.render('student/attemptQuiz.ejs',{quiz});
+            }
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

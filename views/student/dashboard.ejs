@@ -79,14 +79,21 @@
         <h1 class="text-2xl font-bold">📚 Gamified Learning</h1>
         <div class="flex items-center space-x-6">
             <div class="flex items-center space-x-2">
-                <span>🔥 Streak:</span>
+            <span>🔥 Streak: <%if(participant){%>
+                    <%= participant.streak %>
+                <%}%>
+             </span>
                 <span id="streak" class="text-yellow-400 font-bold"> Days</span>
             </div>
             <div class="flex items-center space-x-2">
-                <span>💰 Coins:</span>
+                <span>💰 Coins: <%if(participant){%>
+                    <%= participant.coins %>
+                <%}%> </span>
                 <span id="coins" class="text-green-400 font-bold"></span>
             </div>
-            <button id="theme-toggle" class="bg-blue-500 px-4 py-2 rounded-lg">🌙 Dark Mode</button>
+            <a href="/chat">
+                <button id="theme-toggle" class="bg-blue-500 px-4 py-2 rounded-lg">Chat</button>
+            </a>
             <button onclick="spinWheel()"
                 class="bg-yellow-500 px-4 py-2 rounded-lg text-black hover:bg-yellow-400 transition">🎁 Spin &
                 Win</button>
@@ -98,28 +105,16 @@
         <h2 class="text-3xl font-bold mb-6 text-center" data-aos="fade-down">Welcome Back, <span
                 class="text-yellow-400">
                 <%= currUser.name %>
-            </span> 👋</h2>
-
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="card" data-aos="zoom-in">
-                <h3>Level</h3>
-                <p>🔥 5</p>
-            </div>
-            <div class="card" data-aos="zoom-in" data-aos-delay="200">
-                <h3>Coins</h3>
-                <p>💰 250</p>
-            </div>
-            <div class="card" data-aos="zoom-in" data-aos-delay="400">
-                <h3>Leaderboard Rank</h3>
-                <p>🏆 #12</p>
-            </div>
-        </div>
+            </span>👋</h2>
 
         <!-- Daily Challenges -->
         <div class="mt-8 text-center" data-aos="flip-up">
             <h3 class="text-2xl">🎯 Daily Challenge</h3>
             <p>Complete today’s quiz and earn bonus coins!</p>
+            <br>
+            <a href="/get/today/streak/quiz">
+                <button class="btn">Take Quiz</button>
+            </a>
             <a href="/get/all/streak/quiz">
                 <button class="btn">Take Quiz</button>
             </a>
@@ -142,7 +137,7 @@
 
         <!-- Leaderboard -->
         <div class="mt-10" data-aos="fade-left">
-            <h3 class="text-2xl mb-4">🏆 Leaderboard</h3>
+            <h3 class="text-2xl mb-4">🏆 My Class</h3>
             <table class="table-auto w-full bg-gray-800 rounded-lg">
                 <tr class="text-yellow-400">
                     <th class="p-3">Rank</th>

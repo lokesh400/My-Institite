@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Already Attempted - Error Page</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center font-[Inter]">
+    <div class="max-w-8xl w-full mx-auto px-4 py-16">
+        <div class="max-w-2xl mx-auto text-center" id="error-content">
+            <div class="mb-8">
+                <i class="fas fa-exclamation-circle text-red-500 text-7xl mb-4" id="error-icon"></i>
+                <h1 class="text-6xl font-bold text-gray-900 mb-4" id="error-code">403</h1>
+                <h2 class="text-3xl font-semibold text-gray-800 mb-4" id="error-text">Already Attempted</h2>
+                <p class="text-gray-600 text-lg mb-8">You have already completed this action. Multiple attempts are not permitted for security reasons.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-8" id="attempt-info">
+                <div class="flex flex-col space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Reference ID:</span>
+                        <span class="text-gray-900 font-medium">ATT-2024315-8F4D2</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center gap-4">
+                <a href="/student/dashboard">
+                    <button id="dashboard-btn" class="bg-red-500 text-white px-6 py-3 font-medium rounded-lg hover:bg-red-600 transition-colors">
+                        Return to Dashboard
+                    </button>
+                </a>
+                <a href="#" class="text-red-500 hover:text-red-600 font-medium">Contact Support</a>
+            </div>
+
+            <div class="mt-12">
+                <button class="flex items-center justify-center w-full text-gray-600 hover:text-gray-900" onclick="toggleDetails()">
+                    <span class="mr-2">Show More Details</span>
+                    <i class="fas fa-chevron-down" id="chevron-icon"></i>
+                </button>
+                <div id="details" class="hidden mt-4">
+                    <div class="bg-gray-50 p-4 rounded-lg text-sm text-gray-600">
+                        <p class="mb-2">Our system prevents multiple attempts of the same action to ensure:</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Data integrity and consistency</li>
+                            <li>Prevention of duplicate submissions</li>
+                            <li>Security against automated attacks</li>
+                            <li>Compliance with system policies</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 text-sm text-gray-500">
+                System Time: <span id="system-time"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GSAP Page Load Animation
+        gsap.from("#error-content", { opacity: 0, y: 50, duration: 1, ease: "power2.out" });
+        gsap.from("#error-icon", { scale: 0, duration: 1, ease: "elastic.out(1, 0.6)", delay: 0.2 });
+        gsap.from("#error-code", { opacity: 0, x: -50, duration: 1, delay: 0.4 });
+        gsap.from("#error-text", { opacity: 0, x: 50, duration: 1, delay: 0.6 });
+        gsap.from("#attempt-info", { opacity: 0, y: 30, duration: 1, delay: 0.8 });
+        gsap.from("#dashboard-btn", { opacity: 0, scale: 0.8, duration: 0.6, delay: 1 });
+
+        // GSAP Hover Effect on Button
+        document.getElementById("dashboard-btn").addEventListener("mouseenter", function () {
+            gsap.to(this, { scale: 1.05, duration: 0.3 });
+        });
+        document.getElementById("dashboard-btn").addEventListener("mouseleave", function () {
+            gsap.to(this, { scale: 1, duration: 0.3 });
+        });
+
+        // Toggle Details Animation
+        function toggleDetails() {
+            const details = document.getElementById("details");
+            const chevron = document.getElementById("chevron-icon");
+
+            if (details.classList.contains("hidden")) {
+                details.classList.remove("hidden");
+                gsap.from(details, { height: 0, opacity: 0, duration: 0.5, ease: "power2.out" });
+                chevron.classList.remove("fa-chevron-down");
+                chevron.classList.add("fa-chevron-up");
+            } else {
+                gsap.to(details, { height: 0, opacity: 0, duration: 0.5, ease: "power2.in", onComplete: () => details.classList.add("hidden") });
+                chevron.classList.remove("fa-chevron-up");
+                chevron.classList.add("fa-chevron-down");
+            }
+        }
+
+        // Update System Time
+        function updateSystemTime() {
+            const systemTimeElement = document.getElementById('system-time');
+            const now = new Date();
+            systemTimeElement.textContent = now.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'long' });
+        }
+
+        updateSystemTime();
+        setInterval(updateSystemTime, 1000);
+    </script>
+
+</body>
+</html>

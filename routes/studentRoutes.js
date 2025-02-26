@@ -70,7 +70,8 @@ router.get("/student/dashboard", async (req, res) => {
     const id = req.user.id;
     const participant = await Participant.findOne({participant:id});
     const user = await User.findById(id);
-    res.render("student/dashboard.ejs",{participant}); // Pass data to the EJS template
+    const student = await Student.findOne({email:user.email});
+    res.render("student/dashboard.ejs",{participant,student}); // Pass data to the EJS template
   } catch (error) {
     res.status(500).send("Error fetching students: " + error.message);
   }

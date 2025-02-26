@@ -253,7 +253,7 @@ router.post("/user/login", async (req, res, next) => {
             if (user.role === 'admin') {
                 res.redirect("/admin"); // Redirect to admin dashboard
             } else {
-                res.redirect("/student"); // Redirect to student page
+                res.redirect("/student/dashboard"); // Redirect to student page
             }
             // Send login email notification
             const transporter = nodemailer.createTransport({
