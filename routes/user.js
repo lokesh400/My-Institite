@@ -1,24 +1,73 @@
 const express = require("express");
 const router = express.Router();
 const User = require('../models/User');
+const Student = require('../models/Student');
 const passport = require("passport");
 const nodemailer = require('nodemailer');
 const passportLocalMongoose = require('passport-local-mongoose');
 const Teacher = require('../models/Teacher')
+
+
+const multer = require("multer");
+const path = require("path");
+const cloudinary = require("cloudinary").v2;
+const fs = require("fs");
+const { error } = require("console");
+
+cloudinary.config({
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret,
+});
+
+// Multer disk storage configuration
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // Save files to 'uploads/' folder
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname.replace(/\s+/g, "_"));
+  },
+});
+
+// Initialize multer with diskStorage
+const upload = multer({ storage: storage });
+
+const Upload = {
+  uploadFile: async (filePath) => {
+    try {
+      const result = await cloudinary.uploader.upload(filePath, {
+        resource_type: "auto",
+      });
+
+      // Delete local file after successful upload
+      fs.unlink(filePath, (err) => {
+        if (err) console.error("Error deleting local file:", err);
+      });
+
+      return result;
+    } catch (error) {
+      console.error("Cloudinary Upload Error:", error);
+      throw new Error("Upload failed: " + error.message);
+    }
+  },
+};
+
+function isAdmin(req, res, next) {
+  if (req.isAuthenticated() && req.user.role === "admin") {
+    return next();
+  }
+  res.render("./error/accessdenied.ejs");
+}
 
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
       return next();
     }
     res.redirect('/login');
-  }
-  function isAdmin(req, res, next) {
-    if (req.user.role==='admin') {
-      return next();
-    }
-    res.render('./errors/isAdmin.ejs')
-  }  
-
+}
+  
 // Signup route
 router.get('/signup', (req, res) => {
     req.flash('error_msg', 'Hello Dear');
@@ -85,6 +134,7 @@ router.post("/teachers/add", async (req, res) => {
       const registeredUser = await User.register(newUser, password);
       const newTeacher = new Teacher({
         name,
+        email,
         subject,
         fatherName,
         mobileNumber,
@@ -122,6 +172,55 @@ router.post("/teachers/add", async (req, res) => {
       res.render("./users/signup.ejs");
     }
   });
+
+router.post("/register/new/student",ensureAuthenticated,upload.single("image"),async (req, res) => {
+    try {
+      const {
+        name,
+        email,
+        fatherName,
+        studentClass,
+        mobileNumber,
+        address,
+        admissionCharges,
+        annualCharges,
+        developmentCharges,
+        monthlyFees,
+      } = req.body;
+      const role = "student";
+      const username = email;
+      const password = `${name}@123`;
+      const newUser = new User({ name, role, email, username });
+      const registeredUser = await User.register(newUser, password);
+      console.log(registeredUser);
+      const result = await Upload.uploadFile(req.file.path); // Use the path for Cloudinary upload
+      const photo = result.secure_url;
+      const publicId = result.public_id;
+      const student = new Student({
+        name,
+        email,
+        fatherName,
+        studentClass,
+        mobileNumber,
+        photo,
+        publicId,
+        address,
+        feeDetails: {
+          admissionCharges,
+          annualCharges,
+          developmentCharges,
+          monthlyFees,
+        },
+      });
+      await student.save();
+      req.flash("success_msg", "Student added successfully!");
+      res.redirect("/students");
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Server Error");
+    }
+  }
+);  
   
 
 // Login route

@@ -31,21 +31,6 @@ const storage = multer.diskStorage({
 // Initialize multer with diskStorage
 const upload = multer({ storage: storage });
 
-// Function to upload files to Cloudinary
-// const Upload = {
-//   uploadFile: async (filePath) => {
-//     try {
-//       // Upload the file to Cloudinary
-//       const result = await cloudinary.uploader.upload(filePath, {
-//         resource_type: "auto", // Auto-detect file type (image, video, etc.)
-//       });
-//       return result;
-//     } catch (error) {
-//       throw new Error('Upload failed: ' + error.message);
-//     }
-//   }
-// };
-
 const Upload = {
   uploadFile: async (filePath) => {
     try {
@@ -110,51 +95,6 @@ router.get("/add/new/student", ensureAuthenticated, async (req, res) => {
     res.status(500).send(error);
   }
 });
-
-router.post(
-  "/add/new/student",
-  ensureAuthenticated,
-  upload.single("image"),
-  async (req, res) => {
-    try {
-      const {
-        name,
-        fatherName,
-        studentClass,
-        mobileNumber,
-        address,
-        admissionCharges,
-        annualCharges,
-        developmentCharges,
-        monthlyFees,
-      } = req.body;
-      const result = await Upload.uploadFile(req.file.path); // Use the path for Cloudinary upload
-      const photo = result.secure_url;
-      const publicId = result.public_id;
-      const student = new Student({
-        name,
-        fatherName,
-        studentClass,
-        mobileNumber,
-        photo,
-        publicId,
-        address,
-        feeDetails: {
-          admissionCharges,
-          annualCharges,
-          developmentCharges,
-          monthlyFees,
-        },
-      });
-      await student.save();
-      req.flash("success_msg", "Student added successfully!");
-      res.redirect("/students");
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Server Error");
-    }
-  }
-);
 
 // Add fee details
 router.get("/student/edit/fees/:id", ensureAuthenticated, async (req, res) => {
